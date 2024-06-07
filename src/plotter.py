@@ -5,7 +5,7 @@ import scipy.stats
 
 import ranker
 
-def plot_runtime(transformations : list, sample_id : str):
+def plot_runtime(transformations : list, dir : str):
     x = []
     y = []
     for i in range(1, len(transformations)):
@@ -18,9 +18,9 @@ def plot_runtime(transformations : list, sample_id : str):
     plt.xticks(rotation = 90)
     plt.ylabel("Runtime (s)")
     plt.subplots_adjust(left = 0.125, bottom = 0.28, right = 0.9, top = 0.88, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_runtime.png")
+    plt.savefig(dir + "/runtime.png")
 
-def plot_memory(transformations : list, sample_id : str):
+def plot_memory(transformations : list, dir : str):
     x = []
     y = []
     for i in range(1, len(transformations)):
@@ -33,9 +33,9 @@ def plot_memory(transformations : list, sample_id : str):
     plt.xticks(rotation = 90)
     plt.ylabel("Peak Memory Usage (MB)")
     plt.subplots_adjust(left = 0.125, bottom = 0.28, right = 0.9, top = 0.88, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_memory.png")
+    plt.savefig(dir + "/memory.png")
 
-def plot_gene_mean_var(transformations : list, sample_id : str):
+def plot_gene_mean_var(transformations : list, dir : str):
     fig = plt.figure(figsize = (16, 7.5))
     for t in range(0, len(transformations)):
         ax = fig.add_subplot(4, 5, t + 1)
@@ -46,9 +46,9 @@ def plot_gene_mean_var(transformations : list, sample_id : str):
         ax.yaxis.set_ticks([])
         ax.legend([transformations[t].name], loc = 1, fontsize = "6")
     plt.subplots_adjust(left = 0.125, bottom = 0.03, right = 0.9, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_gene_mean_var.png")
+    plt.savefig(dir + "/gene_mean_var.png")
 
-def plot_marker_genes(transformations : list, genes : dict, sample_id : str):
+def plot_marker_genes(transformations : list, genes : dict, dir : str):
     for gene in genes.keys():
         fig = plt.figure(figsize = (16, 7.5))
         for t in range(0, len(transformations)):
@@ -59,9 +59,9 @@ def plot_marker_genes(transformations : list, genes : dict, sample_id : str):
             ax.legend([transformations[t].name], loc = 1, fontsize = "6")
         plt.subplots_adjust(left = 0.05, bottom = 0.06, right = 0.99, top = 0.94, wspace = 0.34, hspace = 0.4)
         plt.suptitle(gene + "Distributions")
-        plt.savefig(sample_id + "_" + gene + "_distributions.png")
+        plt.savefig(dir + "/" + gene + "_distributions.png")
 
-def plot_hvg_similarity(transformations : list, name : list, sample_id : str):
+def plot_hvg_similarity(transformations : list, name : list, dir : str):
     sims = pandas.DataFrame(0.0, index = name, columns = name)
     for i in transformations:
         i_hvg = i.hvgenes
@@ -74,58 +74,61 @@ def plot_hvg_similarity(transformations : list, name : list, sample_id : str):
     plt.figure(figsize = (16, 7.5))
     seaborn.heatmap(sims, cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.subplots_adjust(left = 0.13, bottom = 0.25, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_hvg_similarity.png")
+    plt.savefig(dir + "/hvg_similarity.png")
 
-def plot_pathway_enrichment(enrichment : pandas.DataFrame, sample_id : str):
+def plot_pathway_enrichment(enrichment : pandas.DataFrame, dir : str):
     plt.figure(figsize = (16, 7.5))
     seaborn.heatmap(enrichment, cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.xlabel("Transformation")
     plt.ylabel("Marker Pathway")
     plt.subplots_adjust(left = 0.13, bottom = 0.25, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_pathway_enrichment.png")
+    plt.savefig(dir + "/pathway_enrichment.png")
 
-def plot_sf_correspondence(t_one : list, t_two : list, sample_id : str):
+def plot_sf_correspondence(t_one : list, t_two : list, dir : str):
     fig = plt.figure(figsize = (16, 7.5))
     for t in range(0, len(t_one)):
         ax = fig.add_subplot(4, 5, t + 1)
-        x = (t_one[t].matrix.sum(1) / (t_one[t].matrix.sum().sum() / len(t_one[t].matrix.index))).to_list()
+        y = t_two[t].matrix
+        x = t_one[t].matrix.loc[y.index.to_list(), :]
+        x = (x.sum(1) / (x.sum().sum() / len(x.index.to_list()))).to_list()
         x = scipy.stats.zscore(x)
-        y = (t_two[t].matrix.sum(1) / (t_two[t].matrix.sum().sum() / len(t_two[t].matrix.index))).to_list()
+        y = (y.sum(1) / (y.sum().sum() / len(y.index.to_list()))).to_list()
         y = scipy.stats.zscore(y)
         ax.scatter(x, y, s = 5)
         ax.axline((0, 0), slope = 1, color = "red")
         ax.set_xlabel("Full Gene Panel")
-        ax.set_ylabel("5000 Gene Panel")
+        ax.set_ylabel("Reduced Gene Panel")
         ax.legend([t_one[t].name], loc = 1, fontsize = "6")
     plt.subplots_adjust(left = 0.05, bottom = 0.06, right = 0.99, top = 0.99, wspace = 0.4, hspace = 0.4)
-    plt.savefig(sample_id + "_sf_correspondence.png")
+    plt.savefig(dir + "/sf_correspondence.png")
 
-def plot_count_correspondence(t_one : list, t_two : list, genes : dict, sample_id : str):
+def plot_count_correspondence(t_one : list, t_two : list, genes : dict, dir : str):
     for gene in genes.keys():
         fig = plt.figure(figsize = (16, 7.5))
         for t in range(0, len(t_one)):
             ax = fig.add_subplot(4, 5, t + 1)
-            x = t_one[t].matrix.loc[:, gene].to_list()
-            y = t_two[t].matrix.loc[:, gene].to_list()
+            y = t_two[t].matrix
+            x = t_one[t].matrix.loc[y.index.to_list(), gene].to_list()
+            y = y.loc[:, gene].to_list()
             ax.scatter(x, y, s = 5)
             ax.axline((0, 0), slope = 1, color = "red")
             ax.set_xlabel("Full Gene Panel")
-            ax.set_ylabel("5000 Gene Panel")
+            ax.set_ylabel("Reduced Gene Panel")
             ax.legend([t_one[t].name], loc = 1, fontsize = "6")
         plt.suptitle(gene)
         plt.subplots_adjust(left = 0.05, bottom = 0.06, right = 0.99, top = 0.94, wspace = 0.5, hspace = 0.4)
-        plt.savefig(sample_id + "_" + gene + "_count_correspondence.png")
+        plt.savefig(dir + "/" + gene + "_count_correspondence.png")
 
-def plot_corr_matrix(transformations : list, sample_id : str):
+def plot_corr_matrix(transformations : list, dir : str):
     fig = plt.figure(figsize = (16, 7.5))
     for t in range(0, len(transformations)):
         ax = fig.add_subplot(4, 5, t + 1)
         plt.title(transformations[t].name)
-        seaborn.heatmap(transformations[t].matrix.corr(), ax = ax, cmap = "Blues", cbar = True, xticklabels = False, yticklabels = False)
+        seaborn.heatmap(transformations[t].matrix.loc[:, transformations[t].hvgenes].corr(), ax = ax, cmap = "Blues", cbar = True, xticklabels = False, yticklabels = False)
     plt.subplots_adjust(left = 0.02, bottom = 0.03, right = 0.97, top = 0.94, wspace = 0.25, hspace = 0.3)
-    plt.savefig(sample_id + "_corr_matrix.png")
+    plt.savefig(dir + "/corr_matrix.png")
 
-def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weight_matrix : pandas.DataFrame, enrichment : pandas.DataFrame, sample_id : str) -> pandas.DataFrame:
+def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weight_matrix : pandas.DataFrame, enrichment : pandas.DataFrame, dir : str) -> pandas.DataFrame:
     runtime = pandas.Series(ranker.rank_runtime(t_one), index = name, name = "Runtime")
     memory = pandas.Series(ranker.rank_memory(t_one), index = name, name = "Memory")
     gmv = pandas.Series(ranker.rank_gene_mean_var(t_one), index = name, name = "Gene Mean-Variance")
@@ -147,4 +150,4 @@ def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weigh
     seaborn.heatmap(rank.loc[trans, analyses], cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.ylabel("Transformation")
     plt.subplots_adjust(left = 0.15, bottom = 0.28, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(sample_id + "_total_rank.png")
+    plt.savefig(dir + "/total_rank.png")

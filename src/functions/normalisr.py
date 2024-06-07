@@ -17,7 +17,7 @@ class Normalisr:
     def transform(self):
         start = time.time()
         tracemalloc.start()
-        
+
         matrix = normalisr.normalisr.lcpm(numpy.array(self.matrix.T))[0]
         self.matrix = pandas.DataFrame(matrix, index = self.matrix.columns, columns = self.matrix.index).T
 

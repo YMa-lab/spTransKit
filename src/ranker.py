@@ -68,9 +68,11 @@ def rank_pathway_enrichment(enrichment : pandas.DataFrame) -> list:
 def rank_sf_correspondence(t_one : list, t_two : list) -> list:
     p_corr = []
     for t in range(0, len(t_one)):
-        x = (t_one[t].matrix.sum(1) / (t_one[t].matrix.sum().sum() / len(t_one[t].matrix.index))).to_list()
+        y = t_two[t].matrix
+        x = t_one[t].matrix.loc[y.index.to_list(), :]
+        x = (x.sum(1) / (x.sum().sum() / len(x.index.to_list()))).to_list()
         x = scipy.stats.zscore(x)
-        y = (t_two[t].matrix.sum(1) / (t_two[t].matrix.sum().sum() / len(t_two[t].matrix.index))).to_list()
+        y = (y.sum(1) / (y.sum().sum() / len(y.index.to_list()))).to_list()
         y = scipy.stats.zscore(y)
         mean_x = sum(x) / len(x)
         mean_y = sum(y) / len(y)
@@ -94,7 +96,8 @@ def rank_count_correspondence(t_one : list, t_two : list, genes : dict) -> list:
     for i in range(0, len(gene_list)):
         p_corr.append([])
         for t in range(0, len(t_one)):
-            x = t_one[t].matrix.loc[:, gene_list[i]].to_list()
+            y = t_two[t].matrix
+            x = t_one[t].matrix.loc[y.index.to_list(), gene_list[i]].to_list()
             y = t_two[t].matrix.loc[:, gene_list[i]].to_list()
             mean_x = sum(x) / len(x)
             mean_y = sum(y) / len(y)
@@ -115,10 +118,11 @@ def rank_count_correspondence(t_one : list, t_two : list, genes : dict) -> list:
 
 def rank_corr_matrix(transformations : list) -> list:
     corr_matrix_sims = []
-    raw = transformations[0].matrix.corr()
-    n = len(raw.index) * len(raw.columns)
+    raw = transformations[0].matrix.loc[:, transformations[0].hvgenes].corr()
+    n = raw.shape[0] * raw.shape[1]
     for t in range(0, len(transformations)):
-       sse = pandas.DataFrame(numpy.square(transformations[t].matrix.corr().sub(raw))).sum(0).sum()
+       squared_err = transformations[t].matrix.loc[:, transformations[t].hvgenes].corr().sub(raw) ** 2
+       sse = squared_err.sum(0).sum()
        rmse = (sse / n) ** 0.5
        corr_matrix_sims.append(rmse)
     max_rmse = max(corr_matrix_sims)

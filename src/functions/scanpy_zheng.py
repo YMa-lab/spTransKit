@@ -18,7 +18,10 @@ class ScanpyZheng:
         tracemalloc.start()
         
         data = scanpy.AnnData(self.matrix)
-        scanpy.pp.recipe_zheng17(data, n_top_genes = len(self.matrix.columns))
+        scanpy.pp.filter_genes(data, min_counts = 1)
+        scanpy.pp._recipes.normalize_total(data, key_added = "n_counts_all")
+        scanpy.pp.log1p(data)
+        scanpy.pp.scale(data)
         self.matrix = data.to_df()
 
         self.runtime = time.time() - start

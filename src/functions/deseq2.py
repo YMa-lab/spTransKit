@@ -1,5 +1,6 @@
 import pydeseq2.preprocessing
 import pandas
+import numpy
 import time
 import tracemalloc
 
@@ -16,8 +17,20 @@ class DESeq2:
     def transform(self):
         start = time.time()
         tracemalloc.start()
-        
-        self.matrix = pydeseq2.preprocessing.deseq2_norm(self.matrix)[0]
+
+        # log_counts = pandas.DataFrame(numpy.log(self.matrix), index = self.matrix.index, columns = self.matrix.columns)
+        # log_means = log_counts.mean(0)
+        # filtered_genes = log_means.loc[log_means != float("-inf")].index.to_list()
+        # log_ratios = log_counts.loc[:, filtered_genes].sub(log_means.loc[filtered_genes], axis = 1)
+
+        log_counts = pandas.DataFrame(numpy.log(self.matrix + 1), index = self.matrix.index, columns = self.matrix.columns)
+        log_means = log_counts.mean(0)
+        filtered_genes = log_means.loc[log_means > 1.0].index.to_list()
+        log_ratios = log_counts.loc[:, filtered_genes].sub(log_means.loc[filtered_genes], axis = 1)
+
+        log_medians = log_ratios.median(axis = 1)
+        size_factors = pandas.Series(numpy.exp(log_medians), index = log_medians.index)
+        self.matrix = self.matrix.div(size_factors, axis = 0)
 
         self.runtime = time.time() - start
         self.memory = tracemalloc.get_tracemalloc_memory() / 1000000
