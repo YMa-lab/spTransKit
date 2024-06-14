@@ -20,7 +20,7 @@ class ScanpyWeinreb:
         
         data = numpy.array(self.matrix)
         scanpy.preprocessing.log1p(data)
-        scanpy.preprocessing._deprecated.normalize_per_cell_weinreb16_deprecated(data)
+        data = scanpy.preprocessing._deprecated.normalize_per_cell_weinreb16_deprecated(data)
         self.matrix = pandas.DataFrame(data, index = self.matrix.index, columns = self.matrix.columns)
 
         self.runtime = time.time() - start

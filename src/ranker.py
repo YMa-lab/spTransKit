@@ -32,10 +32,13 @@ def morans_i(weight_matrix : pandas.DataFrame, gene_dist : pandas.Series) -> flo
     numerator = numerator.multiply(i_dist, axis = 1)
     numerator = numerator.multiply(j_dist, axis = 0)
     weight_sum = weight_matrix.sum(0).sum()
-    moran = (n * numerator.sum(0).sum()) / (weight_sum * i_dist_squared.sum())
+    if weight_sum * i_dist_squared.sum() == 0.0:
+        moran = 0.0
+    else:
+        moran = (n * numerator.sum(0).sum()) / (weight_sum * i_dist_squared.sum())
     return moran
 
-def rank_marker_genes(transformations : list, name : list, genes : dict, weight_matrix : pandas.DataFrame) -> list:
+def rank_marker_genes(transformations : list, name : list, genes : dict, weight_matrix : pandas.DataFrame, results_dir : str) -> list:
     gene_dist = pandas.DataFrame(0.0, index = name, columns = genes.keys())
     for gene in genes.keys():
         if genes[gene] == "normal":
@@ -44,6 +47,9 @@ def rank_marker_genes(transformations : list, name : list, genes : dict, weight_
         elif genes[gene] == "spatial":
             for t in transformations:
                 gene_dist.loc[t.name, gene] = morans_i(weight_matrix, t.matrix.loc[:, gene])
+
+    gene_dist.to_csv(results_dir + "/marker_gene_distributions.csv")
+    
     return gene_dist.mean(1).to_list()
 
 def rank_hvg_similarity(transformations : list) -> list:
@@ -65,7 +71,7 @@ def rank_pathway_enrichment(enrichment : pandas.DataFrame) -> list:
     else:
         return [(z / max_enr) for z in enr]
     
-def rank_sf_correspondence(t_one : list, t_two : list) -> list:
+def rank_sf_correspondence(t_one : list, t_two : list, name : list, results_dir : str) -> list:
     p_corr = []
     for t in range(0, len(t_one)):
         y = t_two[t].matrix
@@ -83,6 +89,9 @@ def rank_sf_correspondence(t_one : list, t_two : list) -> list:
         y_diff_sqaured = [z ** 2 for z in y_diff]
         denominator = (sum(x_diff_sqaured) * sum(y_diff_sqaured)) ** 0.5
         p_corr.append(numerator / denominator)
+    
+    pandas.Series(p_corr, index = name, name = "Pearson Correlation").to_csv(results_dir + "/sf_correspondence.csv")
+
     min_corr = min(p_corr)
     if min_corr < 0:
         p_corr = [(z - min_corr) for z in p_corr]
@@ -90,7 +99,7 @@ def rank_sf_correspondence(t_one : list, t_two : list) -> list:
     p_corr = [(z / max_corr) for z in p_corr]
     return p_corr
 
-def rank_count_correspondence(t_one : list, t_two : list, genes : dict) -> list:
+def rank_count_correspondence(t_one : list, t_two : list, genes : dict, name : list, results_dir : str) -> list:
     p_corr = []
     gene_list = list(genes.keys())
     for i in range(0, len(gene_list)):
@@ -108,6 +117,9 @@ def rank_count_correspondence(t_one : list, t_two : list, genes : dict) -> list:
             y_diff_sqaured = [z ** 2 for z in y_diff]
             denominator = (sum(x_diff_sqaured) * sum(y_diff_sqaured)) ** 0.5
             p_corr[i].append(numerator / denominator)
+
+        pandas.Series(p_corr[i], index = name, name = "Pearson Correlation").to_csv(results_dir + "/" + gene_list[i] + "_count_correspondence.csv")
+
         min_corr = min(p_corr[i])
         if min_corr < 0:
             p_corr[i] = [(z - min_corr) for z in p_corr[i]]
@@ -116,7 +128,7 @@ def rank_count_correspondence(t_one : list, t_two : list, genes : dict) -> list:
     pcavg = pandas.DataFrame(p_corr).mean(0).to_list()
     return pcavg
 
-def rank_corr_matrix(transformations : list) -> list:
+def rank_corr_matrix(transformations : list, name : list, results_dir : str) -> list:
     corr_matrix_sims = []
     raw = transformations[0].matrix.loc[:, transformations[0].hvgenes].corr()
     n = raw.shape[0] * raw.shape[1]
@@ -125,6 +137,9 @@ def rank_corr_matrix(transformations : list) -> list:
        sse = squared_err.sum(0).sum()
        rmse = (sse / n) ** 0.5
        corr_matrix_sims.append(rmse)
+
+    pandas.Series(corr_matrix_sims, index = name, name = "RMSE").to_csv(results_dir + "/corr_matrix.csv")
+
     max_rmse = max(corr_matrix_sims)
     corr_matrix_sims = [(1 - (z / max_rmse)) for z in corr_matrix_sims]
     return corr_matrix_sims

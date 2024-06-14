@@ -5,7 +5,7 @@ import scipy.stats
 
 import ranker
 
-def plot_runtime(transformations : list, dir : str):
+def plot_runtime(transformations : list, figures_dir : str, results_dir : str):
     x = []
     y = []
     for i in range(1, len(transformations)):
@@ -18,9 +18,11 @@ def plot_runtime(transformations : list, dir : str):
     plt.xticks(rotation = 90)
     plt.ylabel("Runtime (s)")
     plt.subplots_adjust(left = 0.125, bottom = 0.28, right = 0.9, top = 0.88, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/runtime.png")
+    plt.savefig(figures_dir + "/runtime.png")
 
-def plot_memory(transformations : list, dir : str):
+    pandas.Series(y, index = x, name = "Runtime (s)").to_csv(results_dir + "/runtime.csv")
+
+def plot_memory(transformations : list, figures_dir : str, results_dir : str):
     x = []
     y = []
     for i in range(1, len(transformations)):
@@ -33,9 +35,11 @@ def plot_memory(transformations : list, dir : str):
     plt.xticks(rotation = 90)
     plt.ylabel("Peak Memory Usage (MB)")
     plt.subplots_adjust(left = 0.125, bottom = 0.28, right = 0.9, top = 0.88, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/memory.png")
+    plt.savefig(figures_dir + "/memory.png")
 
-def plot_gene_mean_var(transformations : list, dir : str):
+    pandas.Series(y, index = x, name = "Peak Memory Usage (MB)").to_csv(results_dir + "/memory.csv")
+
+def plot_gene_mean_var(transformations : list, figures_dir : str):
     fig = plt.figure(figsize = (16, 7.5))
     for t in range(0, len(transformations)):
         ax = fig.add_subplot(4, 5, t + 1)
@@ -46,9 +50,9 @@ def plot_gene_mean_var(transformations : list, dir : str):
         ax.yaxis.set_ticks([])
         ax.legend([transformations[t].name], loc = 1, fontsize = "6")
     plt.subplots_adjust(left = 0.125, bottom = 0.03, right = 0.9, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/gene_mean_var.png")
+    plt.savefig(figures_dir + "/gene_mean_var.png")
 
-def plot_marker_genes(transformations : list, genes : dict, dir : str):
+def plot_marker_genes(transformations : list, genes : dict, figures_dir : str):
     for gene in genes.keys():
         fig = plt.figure(figsize = (16, 7.5))
         for t in range(0, len(transformations)):
@@ -59,9 +63,9 @@ def plot_marker_genes(transformations : list, genes : dict, dir : str):
             ax.legend([transformations[t].name], loc = 1, fontsize = "6")
         plt.subplots_adjust(left = 0.05, bottom = 0.06, right = 0.99, top = 0.94, wspace = 0.34, hspace = 0.4)
         plt.suptitle(gene + "Distributions")
-        plt.savefig(dir + "/" + gene + "_distributions.png")
+        plt.savefig(figures_dir + "/" + gene + "_distributions.png")
 
-def plot_hvg_similarity(transformations : list, name : list, dir : str):
+def plot_hvg_similarity(transformations : list, name : list, figures_dir : str, results_dir : str):
     sims = pandas.DataFrame(0.0, index = name, columns = name)
     for i in transformations:
         i_hvg = i.hvgenes
@@ -74,15 +78,17 @@ def plot_hvg_similarity(transformations : list, name : list, dir : str):
     plt.figure(figsize = (16, 7.5))
     seaborn.heatmap(sims, cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.subplots_adjust(left = 0.13, bottom = 0.25, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/hvg_similarity.png")
+    plt.savefig(figures_dir + "/hvg_similarity.png")
 
-def plot_pathway_enrichment(enrichment : pandas.DataFrame, dir : str):
+    sims.to_csv(results_dir + "/hvg_similarity.csv")
+
+def plot_pathway_enrichment(enrichment : pandas.DataFrame, figures_dir : str):
     plt.figure(figsize = (16, 7.5))
     seaborn.heatmap(enrichment, cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.xlabel("Transformation")
     plt.ylabel("Marker Pathway")
     plt.subplots_adjust(left = 0.13, bottom = 0.25, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/pathway_enrichment.png")
+    plt.savefig(figures_dir + "/pathway_enrichment.png")
 
 def plot_sf_correspondence(t_one : list, t_two : list, dir : str):
     fig = plt.figure(figsize = (16, 7.5))
@@ -128,26 +134,30 @@ def plot_corr_matrix(transformations : list, dir : str):
     plt.subplots_adjust(left = 0.02, bottom = 0.03, right = 0.97, top = 0.94, wspace = 0.25, hspace = 0.3)
     plt.savefig(dir + "/corr_matrix.png")
 
-def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weight_matrix : pandas.DataFrame, enrichment : pandas.DataFrame, dir : str) -> pandas.DataFrame:
+def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weight_matrix : pandas.DataFrame, enrichment : pandas.DataFrame, figures_dir : str, results_dir : str) -> pandas.DataFrame:
     runtime = pandas.Series(ranker.rank_runtime(t_one), index = name, name = "Runtime")
     memory = pandas.Series(ranker.rank_memory(t_one), index = name, name = "Memory")
     gmv = pandas.Series(ranker.rank_gene_mean_var(t_one), index = name, name = "Gene Mean-Variance")
-    mgd = pandas.Series(ranker.rank_marker_genes(t_one, name, genes, weight_matrix), index = name, name = "Marker Gene Distribution")
+    gmv.to_csv(results_dir + "/gene_mean_variance.csv")
+    mgd = pandas.Series(ranker.rank_marker_genes(t_one, name, genes, weight_matrix, results_dir), index = name, name = "Marker Gene Distribution")
     hvg = pandas.Series(ranker.rank_hvg_similarity(t_one), index = name, name = "HVG Similarity")
     enr = pandas.Series(ranker.rank_pathway_enrichment(enrichment), index = name, name = "Pathway Enrichment")
-    sf = pandas.Series(ranker.rank_sf_correspondence(t_one, t_two), index = name, name = "Size Factor Correspondence")
-    nc = pandas.Series(ranker.rank_count_correspondence(t_one, t_two, genes), index = name, name = "Count Correspondence")
-    cm = pandas.Series(ranker.rank_corr_matrix(t_one), index = name, name = "Gene-Gene Correlation")
+    sf = pandas.Series(ranker.rank_sf_correspondence(t_one, t_two, name, results_dir), index = name, name = "Size Factor Correspondence")
+    nc = pandas.Series(ranker.rank_count_correspondence(t_one, t_two, genes, name, results_dir), index = name, name = "Count Correspondence")
+    cm = pandas.Series(ranker.rank_corr_matrix(t_one, name, results_dir), index = name, name = "Gene-Gene Correlation")
+    
     rank = pandas.concat([runtime, memory, gmv, mgd, hvg, enr, sf, nc, cm], axis = 1)
     rank_sum = pandas.Series(rank.sum(1), index = name, name = "Sum")
     rank = pandas.concat([rank, rank_sum], axis = 1)
     rank.sort_values(by = "Sum", axis = 0, ascending = False, inplace = True)
+    
     trans = rank.index.to_list()
     trans.remove("y")
     analyses = rank.columns.to_list()
     analyses.remove("Sum")
+   
     plt.figure(figsize = (16, 7.5))
     seaborn.heatmap(rank.loc[trans, analyses], cmap = "Blues", cbar = True, xticklabels = True, yticklabels = True)
     plt.ylabel("Transformation")
     plt.subplots_adjust(left = 0.15, bottom = 0.28, right = 1.0, top = 0.98, wspace = 0.2, hspace = 0.2)
-    plt.savefig(dir + "/total_rank.png")
+    plt.savefig(figures_dir + "/total_rank.png")
