@@ -150,6 +150,7 @@ def plot_total_rank(t_one : list, t_two : list, name : list, genes : dict, weigh
     rank_sum = pandas.Series(rank.sum(1), index = name, name = "Sum")
     rank = pandas.concat([rank, rank_sum], axis = 1)
     rank.sort_values(by = "Sum", axis = 0, ascending = False, inplace = True)
+    rank.to_csv(results_dir + "/rank_matrix.csv")
     
     trans = rank.index.to_list()
     trans.remove("y")
