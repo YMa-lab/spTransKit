@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+src/sptranskit/__init__.py
+src/sptranskit/helpers.py
+src/sptranskit/transformations.py
+src/sptranskit.egg-info/PKG-INFO
+src/sptranskit.egg-info/SOURCES.txt
+src/sptranskit.egg-info/dependency_links.txt
+src/sptranskit.egg-info/top_level.txt
