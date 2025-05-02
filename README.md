@@ -34,7 +34,11 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 
 # Installation and Usage
 This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. To install, run:
+
 ```pip install -i https://test.pypi.org/simple/ sptranskit```
+
 Import the transformations using the following line of code:
+
 ```import sptranskit.transformations as sp```
+
 Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. 
