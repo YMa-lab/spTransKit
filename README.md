@@ -30,7 +30,7 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | scanpy Seurat | Model-Based | seurat | Fits a gamma-Poisson generalized linear model (GLM) to the gene counts, and adjusts them using a residual. |
 | Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and correct for confounding factors. |
-| PsiNorm | Model-Based | normalisr | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
+| PsiNorm | Model-Based | psinorm | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
 
 # Usage
 This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array.
