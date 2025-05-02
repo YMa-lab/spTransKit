@@ -14,4 +14,9 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 # Transformations
 | Name | Category | Function | Description |
 |   :---:   |   :---:   |   :---:   |   :---:   |
-| y/s | Library Size Factor-Based | size | Adjusts gene counts by the library size factor for each spatial location.
+| y/s | Library Size Factor-Based | size | Adjusts gene counts by the library size factor for each spatial location. |
+| CPM | Library Size Factor-Based | cpm | Adjusts gene counts by the counts per million (CPM) library size factor for each spatial location. |
+| scanpy Weinreb | Library Size Factor-Based | weinreb | Adjusts gene counts by the library size factor for each spatial location. |
+| scanpy Zheng | Library Size Factor-Based | zheng | Adjusts gene counts by the library size factor for each spatial location. |
+| TMM | Library Size Factor-Based | tmm | Adjusts gene counts by the library size factor for each spatial location. |
+| DESeq2 | Library Size Factor-Based | deseq2 | Adjusts gene counts by the library size factor for each spatial location. |
