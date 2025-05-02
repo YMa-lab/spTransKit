@@ -4,8 +4,9 @@
 This repository provides the code for the 16 transformation methods evaluated in the study: A Comprehensive Benchmarking and Practical Guide to Transformation Methods for Spatial Transcriptomics and Downstream Analyses. The methods are designed to be easily called within any spatial transcriptomics analysis pipeline.
 
 # Table of Contents
-- [Background](#Background)
-- [Transformations](#Transformations)
+- [Background](#background)
+- [Transformations](#transformations)
+- [Usage](#usage)
 
 # Background
 
@@ -16,7 +17,20 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 |   :---:   |   :---:   |   :---:   |   :---:   |
 | y/s | Library Size Factor-Based | size | Adjusts gene counts by the library size factor for each spatial location. |
 | CPM | Library Size Factor-Based | cpm | Adjusts gene counts by the counts per million (CPM) library size factor for each spatial location. |
-| scanpy Weinreb | Library Size Factor-Based | weinreb | Adjusts gene counts by the library size factor for each spatial location. |
-| scanpy Zheng | Library Size Factor-Based | zheng | Adjusts gene counts by the library size factor for each spatial location. |
-| TMM | Library Size Factor-Based | tmm | Adjusts gene counts by the library size factor for each spatial location. |
-| DESeq2 | Library Size Factor-Based | deseq2 | Adjusts gene counts by the library size factor for each spatial location. |
+| scanpy Weinreb | Library Size Factor-Based | weinreb | Adjusts gene counts using a logarithmic shift, a size normalization for each spatial location, and a z normalization for each gene. |
+| scanpy Zheng | Library Size Factor-Based | zheng | Adjusts gene counts using a size normalization, a logarithmic shift, and z normalization for each gene. |
+| TMM | Library Size Factor-Based | tmm | Estimates scale factors using log-fold changes between each location and a reference, excluding genes with extreme expression. |
+| DESeq2 | Library Size Factor-Based | deseq2 | Computes scale factors by comparing each gene’s expression relative to a pseudo-reference sample. |
+| log(y/s + 1) | Delta Method-Based | shifted_log | Stabilizes the variance across genes. |
+| log(CPM + 1) | Delta Method-Based | cpm_shifted_log | Stabilizes the variance across genes. |
+| log(y/s + 1)/u | Delta Method-Based | shifted_log_size | Stabilizes the variance across genes. |
+| acosh(2αy/s + 1) | Delta Method-Based | acosh | Stabilizes the variance across genes. |
+| log(y/s + 1/4α) | Delta Method-Based | pseudo_shifted_log | Stabilizes the variance across genes. |
+| Analytic Pearson | Model-Based | analytic_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
+| scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
+| scanpy Seurat | Model-Based | seurat | Fits a gamma-Poisson generalized linear model (GLM) to the gene counts, and adjusts them using a residual. |
+| Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and correct for confounding factors. |
+| PsiNorm | Model-Based | normalisr | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
+
+# Usage
+This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array.
