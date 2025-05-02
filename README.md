@@ -1,6 +1,5 @@
-<img src="logo/sptranskit.png" width="100px" align="left"/> spTransKit: A Toolkit for Transformation Methods in Spatial Transcriptomics 
+<img src="logo/sptranskit.png" width="80px" align="left"/> spTransKit: A Toolkit for Transformation Methods in Spatial Transcriptomics 
 ============
-
 
 This repository provides the code for the 16 transformation methods evaluated in the study: A Comprehensive Benchmarking and Practical Guide to Transformation Methods for Spatial Transcriptomics and Downstream Analyses. The methods are designed to be easily called within any spatial transcriptomics analysis pipeline.
 
