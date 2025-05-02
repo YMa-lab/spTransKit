@@ -9,6 +9,8 @@ This repository provides the code for the 16 transformation methods evaluated in
 
 # Background
 
+Spatial resolved transcriptomics (SRT) allows for the localization of gene expression to specific regions of tissue, aiding in the investigation of spatially dependent biological phenomena. Due to the many advantages of SRT over other transcriptomics technologies, several computational methods have been designed to analyze spatial transcriptomics data and extract biologically relevant spatial information. Despite the diversity of these methods, all pipelines typically begin with preprocessing of the raw expression data. Preprocessing is required to correct for the technical noise introduced by the spatial transcriptomics platform, which often obscures underlying biological signals.
+
 # Transformations
 | Name | Category | Function | Description |
 |   :---:   |   :---:   |   :---:   |   :---:   |
