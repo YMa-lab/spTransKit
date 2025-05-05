@@ -6,7 +6,7 @@ This repository provides the code for the 16 transformation methods evaluated in
 # Table of Contents
 - [Background](#background)
 - [Transformations](#transformations)
-- [Usage](#usage)
+- [Installation and Usage](#installation-and-usage)
 
 # Background
 
@@ -29,7 +29,7 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | Analytic Pearson | Model-Based | analytic_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | scanpy Seurat | Model-Based | seurat | Fits a gamma-Poisson generalized linear model (GLM) to the gene counts, and adjusts them using a residual. |
-| Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and correct for confounding factors. |
+| Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and to correct for confounding factors. |
 | PsiNorm | Model-Based | psinorm | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
 
 # Installation and Usage
