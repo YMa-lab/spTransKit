@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sptranskit
-Version: 0.0.2
+Version: 0.0.4
 Summary: Transformation methods for spatial transcriptomics
 Author-email: Vivek Rajani <vsrajani03@gmail.com>
 License-Expression: MIT
@@ -10,6 +10,10 @@ Classifier: Operating System :: OS Independent
 Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: scanpy
+Requires-Dist: normalisr
 Dynamic: license-file
 
 <img src="logo/sptranskit.png" width="75px" align="left"/> spTransKit: A Toolkit for Transformation Methods in Spatial Transcriptomics 
@@ -20,7 +24,7 @@ This repository provides the code for the 16 transformation methods evaluated in
 # Table of Contents
 - [Background](#background)
 - [Transformations](#transformations)
-- [Usage](#usage)
+- [Installation and Usage](#installation-and-usage)
 
 # Background
 
@@ -43,7 +47,7 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | Analytic Pearson | Model-Based | analytic_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | scanpy Seurat | Model-Based | seurat | Fits a gamma-Poisson generalized linear model (GLM) to the gene counts, and adjusts them using a residual. |
-| Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and correct for confounding factors. |
+| Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and to correct for confounding factors. |
 | PsiNorm | Model-Based | psinorm | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
 
 # Installation and Usage

@@ -7,4 +7,5 @@ src/sptranskit/transformations.py
 src/sptranskit.egg-info/PKG-INFO
 src/sptranskit.egg-info/SOURCES.txt
 src/sptranskit.egg-info/dependency_links.txt
+src/sptranskit.egg-info/requires.txt
 src/sptranskit.egg-info/top_level.txt

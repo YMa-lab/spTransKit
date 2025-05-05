@@ -1,6 +1,6 @@
 [project]
 name = "sptranskit"
-version = "0.0.2"
+version = "0.0.4"
 authors = [
   { name="Vivek Rajani", email="vsrajani03@gmail.com" },
 ]
