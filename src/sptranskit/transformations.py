@@ -4,7 +4,7 @@ import scanpy as sc
 import scanpy.preprocessing._deprecated as scppd
 import normalisr.normalisr as n
 
-import helpers as h
+import sptranskit.helpers as h
 
 # Size Factor-Based Transformations
 
