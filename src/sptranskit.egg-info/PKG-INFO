@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sptranskit
-Version: 0.0.4
+Version: 0.0.5
 Summary: Transformation methods for spatial transcriptomics
 Author-email: Vivek Rajani <vsrajani03@gmail.com>
 License-Expression: MIT
