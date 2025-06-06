@@ -204,14 +204,14 @@ def shifted_log(matrix : sc.AnnData, inplace : bool = False):
     copy: sc.AnnData, copy of the transformed gene count matrix if inplace = False
 
     """
-
-    shift = np.divide(matrix.X, h.size_factor(matrix.X)) + 1
     
+    shift = np.log1p((matrix.X / h.size_factor(matrix.X)))
+
     if inplace:
-        matrix.X = np.log10(shift)
+        matrix.X = shift
     else:
         copy = matrix.copy()
-        copy.X = np.log10(shift)
+        copy.X = shift
         return copy
     
 def cpm_shifted_log(matrix : sc.AnnData, inplace : bool = False):
@@ -228,13 +228,13 @@ def cpm_shifted_log(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
-    shift = np.divide(matrix.X, h.cpm(matrix.X)) + 1
+    shift = np.log1p(matrix.X / h.cpm(matrix.X))
     
     if inplace:
-        matrix.X = np.log10(shift)
+        matrix.X = shift
     else:
         copy = matrix.copy()
-        copy.X = np.log10(shift)
+        copy.X = shift
         return copy
 
 def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
@@ -251,14 +251,13 @@ def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
-    u = h.size_normalization(matrix.X)
-    shift = np.divide(matrix.X, h.size_factor(matrix.X)) + 1
+    shift = np.log1p(matrix.X / h.size_factor(matrix.X))
 
     if inplace:
-        matrix.X = np.divide(np.log10(shift), u)
+        matrix.X = shift / h.size_normalization(shift)
     else:
         copy = matrix.copy()
-        copy.X = np.divide(np.log10(shift), u)
+        copy.X = shift / h.size_normalization(shift)
         return copy
 
 def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
@@ -276,14 +275,14 @@ def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
 
     """
 
-    size = np.divide(matrix.X, h.size_factor(matrix.X))
-    shift = (size * alpha * 2) + 1
+    size = matrix.X / h.size_factor(matrix.X)
+    shift = (1 / np.sqrt(alpha)) * np.arccosh((size * alpha * 2) + 1)
 
     if inplace:
-        matrix.X = np.arccosh(shift)
+        matrix.X = shift
     else:
         copy = matrix.copy()
-        copy.X = np.arccosh(shift)
+        copy.X = shift
         return copy
     
 def pseudo_shifted_log(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
@@ -301,13 +300,13 @@ def pseudo_shifted_log(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool
 
     """
 
-    shift = np.divide(matrix.X, h.size_factor(matrix.X)) + (1 / (4 * alpha))
+    shift = (1 / np.sqrt(alpha)) * np.log1p(4 * alpha * (matrix.X / h.size_factor(matrix.X)))
 
     if inplace:
-        matrix.X = np.log10(shift)
+        matrix.X = shift
     else:
         copy = matrix.copy()
-        copy.X = np.log10(shift)
+        copy.X = shift
         return copy
     
 # Model-Based Transformations

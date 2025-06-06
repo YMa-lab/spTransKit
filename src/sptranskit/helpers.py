@@ -13,7 +13,9 @@ def size_factor(matrix : np.ndarray) -> np.ndarray:
 
     """
 
-    return np.reshape(np.divide(matrix.sum(1), (matrix.sum() / matrix.shape[0])), (matrix.shape[0], 1))
+    sf = matrix.sum(1) / (matrix.sum() / matrix.shape[0])
+
+    return np.reshape(sf, (matrix.shape[0], 1))
 
 def cpm(matrix : np.ndarray) -> np.ndarray:
     """ This function calculates the counts per million (CPM) library size factor for each spatial location.
@@ -31,8 +33,8 @@ def cpm(matrix : np.ndarray) -> np.ndarray:
     return np.reshape((matrix.sum(1) / 1000000), (matrix.shape[0], 1))
 
 def size_normalization(matrix : np.ndarray) -> np.ndarray:
-    """ This function calculates the sum of all gene counts for each spatial location. Utilized for the log(y/s + 1)/u
-    transformation.
+    """ This function calculates the additional size normalization for each spatial location. Utilized for the 
+    log(y/s + 1)/u transformation.
     
     Parameters
     ----------
@@ -40,11 +42,13 @@ def size_normalization(matrix : np.ndarray) -> np.ndarray:
 
     Returns
     ----------
-    u: np.ndarray, N x 1 array of gene count sums for each spatial location
+    u: np.ndarray, N x 1 array of size normalizations for each spatial location
 
     """
 
-    return np.reshape(matrix.sum(1), (matrix.shape[0], 1))
+    u = matrix.sum(1) / (matrix.sum() / matrix.shape[0])
+
+    return np.reshape(u, (matrix.shape[0], 1))
 
 def n(matrix : np.ndarray) -> np.ndarray:
     """ This function calculates the sum of all gene counts for each spatial location. Utilized for the Analytic Pearson
@@ -76,4 +80,4 @@ def p(matrix : np.ndarray) -> np.ndarray:
 
     """
 
-    return np.divide(matrix.sum(0), n(matrix).sum())
+    return matrix.sum(0) / n(matrix).sum()

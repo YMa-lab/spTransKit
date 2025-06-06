@@ -41,4 +41,6 @@ Import the transformations using the following line of code:
 
 ```import sptranskit.transformations as sp```
 
-Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. 
+Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix.
+
+``````
