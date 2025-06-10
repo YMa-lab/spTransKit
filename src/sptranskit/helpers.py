@@ -32,24 +32,6 @@ def cpm(matrix : np.ndarray) -> np.ndarray:
 
     return np.reshape((matrix.sum(1) / 1000000), (matrix.shape[0], 1))
 
-def size_normalization(matrix : np.ndarray) -> np.ndarray:
-    """ This function calculates the additional size normalization for each spatial location. Utilized for the 
-    log(y/s + 1)/u transformation.
-    
-    Parameters
-    ----------
-    matrix: np.ndarray, N x G gene count matrix
-
-    Returns
-    ----------
-    u: np.ndarray, N x 1 array of size normalizations for each spatial location
-
-    """
-
-    u = matrix.sum(1) / (matrix.sum() / matrix.shape[0])
-
-    return np.reshape(u, (matrix.shape[0], 1))
-
 def n(matrix : np.ndarray) -> np.ndarray:
     """ This function calculates the sum of all gene counts for each spatial location. Utilized for the Analytic Pearson
     transformation.

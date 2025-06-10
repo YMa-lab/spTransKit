@@ -254,10 +254,10 @@ def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
     shift = np.log1p(matrix.X / h.size_factor(matrix.X))
 
     if inplace:
-        matrix.X = shift / h.size_normalization(shift)
+        matrix.X = shift / h.size_factor(shift)
     else:
         copy = matrix.copy()
-        copy.X = shift / h.size_normalization(shift)
+        copy.X = shift / h.size_factor(shift)
         return copy
 
 def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
