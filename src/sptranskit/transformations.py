@@ -26,12 +26,12 @@ def size(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
     
@@ -51,12 +51,12 @@ def cpm(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -76,12 +76,12 @@ def zheng(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -108,16 +108,16 @@ def tmm(matrix : sc.AnnData,
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     logratio_trim
-        float, fraction of data to trim from the ends of ranked log ratios, default = 0.3
+        float, fraction of data to trim from the ends of ranked log ratios, default = 0.3.
     sum_trim
-        float, fraction of data to trim from the ends of ranked sums, default = 0.05
+        float, fraction of data to trim from the ends of ranked sums, default = 0.05.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -184,12 +184,12 @@ def deseq2(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
     np.seterr(all = "ignore")
@@ -224,12 +224,12 @@ def shifted_log(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
     
@@ -251,12 +251,12 @@ def cpm_shifted_log(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -278,12 +278,12 @@ def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -305,14 +305,14 @@ def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     alpha
-        float, overdispersion hyperparamter, default = 0.05
+        float, overdispersion hyperparamter, default = 0.05.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -335,14 +335,14 @@ def pseudo_shifted_log(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     alpha
-        float, overdispersion hyperparamter, default = 0.05
+        float, overdispersion hyperparamter, default = 0.05.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -366,14 +366,14 @@ def analytic_pearson_noclip(matrix : sc.AnnData, alpha : float = 0.05, inplace :
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     alpha
-        float, overdispersion hyperparamter, default = 0.05
+        float, overdispersion hyperparamter, default = 0.05.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -394,7 +394,7 @@ def analytic_pearson_noclip(matrix : sc.AnnData, alpha : float = 0.05, inplace :
         return copy
 
 
-def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
+def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, clip : float = None, inplace : bool = False):
     """ This function applies the Analytic Pearson (clip) transformation to the gene count matrix.
     
     Parameters
@@ -402,14 +402,19 @@ def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, inplace : b
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     alpha
-        float, overdispersion hyperparamter, default = 0.05
+        float, overdispersion hyperparamter, default = 0.05.
+    clip
+        float, handles how the Pearson residuals are clipped. 
+        • If None, resiudals are clipped using the default interval [-√N, √N], where N is the number of spatial locations
+          in the dataset.
+        • If a scalar, $c$ is provided, then the residuals will be clipped using the interval [-c, c].
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -422,7 +427,9 @@ def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, inplace : b
 
     final_matrix = np.divide((np.subtract(matrix.X, nb_matrix)), var_matrix)
     
-    clip = matrix.X.shape[0] ** 0.5
+    if clip is None:
+        clip = matrix.X.shape[0] ** 0.5
+    
     final_matrix = np.where(final_matrix > clip, clip, final_matrix)
     final_matrix = np.where(final_matrix < -clip, -clip, final_matrix)
     
@@ -447,20 +454,28 @@ def sc_pearson(matrix : sc.AnnData,
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     theta
-        float,
+        float, the negative binomial overdispersion parameter for Pearson residuals, equal to 1/α, the overdisperson
+        parameter used in the other Pearson residual transformations.
     clip
-        float,
+        float, determines if and how residuals should be clipped. 
+        • If None, residuals are clipped to the interval [-√N, √N], where N is the number of spatial locations in the
+          dataset.
+        • If any scalar, c, is provided, residuals are clipped to the interval [-c, c]. Set clip = np.inf for no
+          clipping.
     check_values
-        bool,
+        bool, checks to see if counts are integers, default = True.
+        • If True, checks if counts in selected layer are integers as expected by this function, and return a warning if
+          non-integers are found.
+        • If False, proceeds without checking. This can speed up code for large datasets.
     layer
-        str,
+        str, layer to use as input instead of X, default = None, in which X is used.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -489,26 +504,29 @@ def normalisr(matrix : sc.AnnData,
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     normalize,
-        bool,
+        bool, whether to normalize output to logCPM per cell, defualt = True.
     nth
-        int,
+        int, number of threads to use, default = 0, which uses all cores automatically detected.
     ntot
-        int,
+        int, manually sets value of total number of reads in binomial distribution, default = None. Since the posterior 
+        distribution stabilizes quickly as ntot increases, a large number (e.g. 1e9) is good for general use. The default
+        of None disables the manual value.
     varscale
-        float,
+        float, resamples estimated expression using the posterior Beta distribution, default = 0. varscale sets the scale
+        of variance rather than its actual value from the posterior distribution.
     seed
-        int,
+        int, inital random seed if set, default = None.
     lowmem
-        bool,
+        bool, low memory mode, default = True.
     nocov
-        bool,
+        bool, whether to skip producing covariate variables, default = False.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -531,12 +549,12 @@ def psinorm(matrix : sc.AnnData, inplace : bool = False):
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -574,7 +592,7 @@ def sctransform(matrix : sc.AnnData,
                 return_cell_attr : bool = False,
                 return_gene_attr : bool = True,
                 return_corrected_umi : bool = False,
-                min_variance : float | Literal["umi_median", "model_median", "model_mean"] = "-Inf",
+                min_variance : float | Literal["umi_median", "model_median", "model_mean", "-Inf"] = "-Inf",
                 bw_adjust : float = 3,
                 gmean_eps : float = 1,
                 theta_estimation_fun : Literal["theta.ml", "theta.mm"] = "theta.ml",
@@ -595,70 +613,91 @@ def sctransform(matrix : sc.AnnData,
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     cell_attr
-        pd.DataFrame,
+        pd.DataFrame, a data frame containining the dependent variables, default = None, in which a data frame with UMI
+        and genes is generated.
     latent_var
-        list[str],
+        list[str], the independent variables to regress out, expressed as a list of strings, default = ["log_umi"]. These
+        names must match the column names in cell_attr.
     batch_var
-        list[str],
+        list[str], the independent variables indicating which batch a spatial location belongs to, default = None, in
+        which no batch interaction terms are used.
     latent_var_nonreg
-        list[str],
+        list[str], the non-regularized dependent variables to regress out, expressed as a list of strings, default = 
+        None. These names must match the column names in cell_attr.
     n_genes
-        int,
+        int, number of genes to use when estimating parameters, default = 2000.
     n_cells
-        int,
+        int, number of spatial locations to use when estimating parameters, default = None, in which all spatial
+        locations are used.
     method
-        str,
+        str, method to use for inital parameter estimation. Can be one of "poisson", "qpoisson", "nb_fast", "nb",
+        "nb_theta_given", "glmGamPoi", "offset", "offset_shared_theta_estimate", or "glmGamPoi_offset", default = 
+        "poisson".
     do_regularize
-        bool,
+        bool, whether to use the n_genes parameter in initial parameter estimation, default = True.
     theta_regularization
-        str,
+        str, method to use to regularize theta, default = "od_factor"
     res_clip_range
-        list[str],
+        list[float], list of numbers of length 2, specifying the min and max values the results will be clipped to,
+        default = None, which uses the default interval [-√N, √N], where N is the number of spatial locations in the
+        dataset.
     bin_size
-        int,
+        int, number of genes to process simultaneously, default = 500.
     min_cells
-        int,
+        int, only use genes that have been detected in this many cells, default = 5.
     residual_type
-        str,
+        str, which type of residuals to return. Can be one of "pearson", "deviance", or "none", default = "pearson".
     return_cell_attr
-        bool,
+        bool, make cell attributes part of the output, default = False.
     return_gene_attr
-        bool,
+        bool, calculate gene attributes and make part of the output, default = True.
     return_corrected_umi
-        bool,
+        bool, return output containing corrected UMI matric, defualt = False.
     min_variance
-        float or str,
+        float or str, lower bound for the estimated variance for any gene in any cell when calculating the Pearson
+        residual. Can be one of "umi_median", "model_median", "model_mean", "-Inf", or a scalar, default = "-Inf".
+        • If "umi_median", uses (median of non-zero UMIs / 5)^2 as the minimum variance.
+        • If "model_median" or "model_mean", uses the median/mean of the model estimated µ per gene as the minimum
+          variance.
     bw_adjust
-        float,
+        float, kernel bandwidth adjustment factor used during regularization, default = 3.
     gmean_eps
-        float,
+        float, small value added when calculating geometric mean of a gene to avoid log(0), default = 1.
     theta_estimation_fun
-        str,
+        str, indicates which method to use to estimate theta when method = poisson, default = "theta.ml".
     theta_given
-        list or float,
+        list or float, specified values for theta parameter, default = None.
+        • If method = "nb_theta_given", should be a list of numbers of fixed theta values for each gene.
+        • If method = "offset", should be a single value.
     exclude_poisson
-        bool,
+        bool, exclude poisson genes (e.g. µ < 0.001 or µ > variance) from regularization, default = False.
     use_geometric_mean
-        bool,
+        bool, use geometric mean instead of arithmetic mean for all calculations, default = True.
     use_geometric_mean_offset
-        bool,
+        bool, use geometric mean instead of arithmetic mean in the offset model for all calculations, default = False.
     fix_intercept
-        bool,
+        bool, fix intercept as defined in the offset model, default = False.
     fix_slope
-        bool,
+        bool, fix slope to log(10), default = False.
     scale_factor
-        float,
+        float, replace all values of UMI in the regression model by this value instead of the median UMI, default = 
+        np.nan.
     vst_flavor
-        str,
+        str, flavor of the model to use, default = None.
+        • If None, which uses the original sctransform model
+        • If "v2", sets method = "glmGamPoi_offset", n_cells = 2000, and exclude_poisson = True.
     verbosity
-        int,
+        int, sets message output settings, default = 2.
+        • If 0, shows no messages when function is running.
+        • If 1, shows only messages when function is running.
+        • If 2, shows both messages and progress bars when function is running.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -752,38 +791,52 @@ def dino(matrix : sc.AnnData,
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
     nCores
-        int,
+        int, non-negative integer scalar denoting the number of cores to be used, default = 2. Setting nCores to 0, uses
+        all cores that are automatically detected.
     prec
-        int,
+        int, positive integer denoting the number of decimals to which to round depth and normalized counts for
+        computational efficiency, default = 3.
     minNZ
-        int,
+        int, positive integer denoting the minimum number of non-zero counts for a gene to be normalized by the Dino
+        algorithm, default = 10.
     nSubGene
-        int,
+        int, positive number denoting the number of genes to subset for calculation of slope, default = 10000.
     nSubCell
-        int,
+        int, positive number denoting the number of spatial locations to subset for calculation of slope and the EM
+        algorithm, default = 10000.
     depth
-        list[float],
+        list[float], list of length equal to number of spatial locations of median-centered, log-scaled measures of 
+        cell-wise sequencing depth, default = None.
     slope
-        float,
+        float, scalar denoting the count-depth relationship on the log-log scale, default = None, which allows the Dino
+        algorithm to calculate slope internally.
     minSlope
-        float,
+        float, scalar denoting the minimum slope, default = 0.5.
     maxSlope
-        float,
+        float, scalar denoting the maximum slope, defualt = 2.
     clusterSlope
-        bool,
+        bool, whether cells should be pre-clustered prior to calculation of slope and cluster should then be used as a
+        factor in regression, default = True.
     returnMeta
-        bool,
+        bool, whether metadata (sequencing depth and slope) should be returned, default = False.
     doRQS
-        bool,
+        bool, which method normalization resampling should be done, default = False.
+        • If False, normalization is done by resampling the entire posterior distribution.
+        • If True, restricted quantile sampling (RQS) can be performed to enforce stronger preservation of expression
+          ranks in normalized data.
     emPar
-        dict,
+        dict, parameters to send to EM algorithm
+        • maxIter denotes the maximum number of model updates.
+        • tol denotes the cutoff threshold for reductions in the log likelihood function.
+        • conPar denotes the concentration parameter for the resampling.
+        • maxK denotes the maximum number of mixture components in the mixture model.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 
@@ -857,40 +910,42 @@ def spanorm(matrix : sc.AnnData,
         pd.DataFrame, N x 2 coordinate matrix. Rows correspond to spatial locations and columns correspond to the x and
         y spatial coordinates.
     sample_p
-        float,
+        float, maximum proportion of spatial locations to sample for model fitting, default = 0.25.
     gene_model
-        str,
+        str, model to use for gene/protein abundances, default = "nb".
     adj_method
-        str,
+        str, method to use to adjust the data. Can be one of "auto", "logpac", "pearson", "medbio", or "meanbio", default
+        = "auto".
     scale_factor
-        float,
+        float, sample-specific scaling factor to adjust the counts, default = 1.
     df_tps
-        float,
+        float, degrees of freedom for the thin-plate spline, default = 6.
     lambda_a
-        float,
+        float, smoothing parameter for regularizing regression coefficients, default = 0.0001
     batch
-        pd.DataFrame,
+        pd.DataFrame, specifies batch design to regress out, default = None.
     tol
-        float,
+        float, tolerance for convergence, default = 0.0001
     step_factor
-        float,
+        float, multiplicative factor to decrease IRLS step when log-likelihood diverges, default = 0.5.
     maxit_nb
-        int,
+        int, maximum number of IRLS iterations for estimating NB mean parameters for a given dispersion parameter,
+        default = 50.
     maxit_psi
-        int,
+        int, maximum number of IRLS iterations for estimating the dispersion parameter, default = 25.
     maxn_psi
-        int,
+        int, maximum number of spatial locations to sample for dispersion estimation, default = 500.
     overwrite
-        bool,
+        bool, whether to force recomputation and overwrite an existing fit, default = False.
     verbose
-        bool,
+        bool, whether to show update messages, default = True.
     inplace
-        bool, whether to transform the matrix within the original AnnData object, default = False
+        bool, whether to transform the matrix within the original AnnData object, default = False.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the transformed gene count matrix if inplace = False
+        sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
 

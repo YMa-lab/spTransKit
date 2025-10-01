@@ -57,7 +57,7 @@ def n(matrix : np.ndarray) -> np.ndarray:
     Returns
     ----------
     n
-        np.ndarray, N x 1 array of gene count sums for each spatial location
+        np.ndarray, N x 1 array of gene count sums for each spatial location.
 
     """
 
@@ -76,7 +76,7 @@ def p(matrix : np.ndarray) -> np.ndarray:
     Returns
     ----------
     p
-        np.ndarray, G x 1 array of expression proportions for each gene
+        np.ndarray, G x 1 array of expression proportions for each gene.
 
     """
 
@@ -90,7 +90,7 @@ def handle_r_params(params : dict):
     Parameters
     ----------
     params
-        dict, dictionary of parameters passed into the parent function
+        dict, dictionary of parameters passed into the parent function.
     
     """
 
@@ -130,7 +130,7 @@ def get_unfiltered_dlpfc_data(sample : Literal["151507", "151508", "151509", "15
     ----------
     sample
         str, specifies the sample from the Human DLPFC dataset, options = 151507, 151508, 151509, 151510, 151669, 151670,
-        151671, 151672, 151673, 151674, 151675, 151676
+        151671, 151672, 151673, 151674, 151675, 151676.
 
     Returns
     ----------
@@ -162,7 +162,7 @@ def get_filtered_dlpfc_data(sample : Literal["151507", "151508", "151509", "1515
     ----------
     sample
         str, specifies the sample from the Human DLPFC dataset, options = 151507, 151508, 151509, 151510, 151669, 151670,
-        151671, 151672, 151673, 151674, 151675, 151676
+        151671, 151672, 151673, 151674, 151675, 151676.
 
     Returns
     ----------

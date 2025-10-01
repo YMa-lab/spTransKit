@@ -16,16 +16,16 @@ def filter_counts(matrix : sc.AnnData,
         pd.DataFrame, N x 2 coordinate matrix. Rows correspond to spatial locations and columns correspond to the x and
         y spatial coordinates.
     min_counts_per_gene
-        int, the minimum number of counts a gene must have across all spatial locations, default = 1
+        int, the minimum number of counts a gene must have across all spatial locations, default = 1.
     min_counts_per_loc
-        int, the minimum number of counts a spatial location must have across all genes, default = 1
+        int, the minimum number of counts a spatial location must have across all genes, default = 1.
 
     Returns
     ----------
     copy
-        sc.AnnData, copy of the filtered gene count matrix if inplace = False
+        sc.AnnData, copy of the filtered gene count matrix if inplace = False.
     coord
-        pd.DataFrame, copy of the filtered spatial coordinate matrix if inplace = False
+        pd.DataFrame, copy of the filtered spatial coordinate matrix if inplace = False.
 
     """
     
