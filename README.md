@@ -33,11 +33,11 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | PsiNorm | Model-Based | psinorm | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
 
 # Installation and Usage
-This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. To install, run:
+This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. To install, run the command:
 
 ```pip3 install sptranskit```
 
-Import the transformations using the following line of code:
+Import the transformations module using the following line of code:
 
 ```import sptranskit.transformations as sp```
 

@@ -1,4 +1,5 @@
-__all__ = ["transformations", "helpers"]
+__all__ = ["transformations", "filter", "helpers"]
 
 from sptranskit import helpers
+from sptranskit import filter
 from sptranskit import transformations

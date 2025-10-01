@@ -5,7 +5,7 @@ authors = [
   { name="Vivek Rajani", email="vsrajani03@gmail.com" },
 ]
 description = "Transformation methods for spatial transcriptomics"
-dependencies = ["pandas", "numpy", "scanpy", "normalisr"]
+dependencies = ["typing", "pandas", "numpy", "scanpy", "normalisr", "rpy2"]
 readme = "README.md"
 requires-python = ">=3.9"
 classifiers = [
