@@ -1,4 +1,6 @@
+typing
 pandas
 numpy
 scanpy
 normalisr
+rpy2

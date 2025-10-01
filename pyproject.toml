@@ -2,8 +2,7 @@
 name = "sptranskit"
 version = "0.0.10"
 authors = [
-  { name="Vivek Rajani", email="vsrajani03@gmail.com" 
-    name="Yu Zhu", email="yu_zhu@brown.edu" },
+  { name="Vivek Rajani", email="vsrajani03@gmail.com" }
 ]
 description = "Transformation methods for spatial transcriptomics"
 dependencies = ["typing", "pandas", "numpy", "scanpy", "normalisr", "rpy2"]

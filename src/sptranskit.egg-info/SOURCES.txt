@@ -2,7 +2,9 @@ LICENSE
 README.md
 pyproject.toml
 src/sptranskit/__init__.py
+src/sptranskit/filter.py
 src/sptranskit/helpers.py
+src/sptranskit/test.py
 src/sptranskit/transformations.py
 src/sptranskit.egg-info/PKG-INFO
 src/sptranskit.egg-info/SOURCES.txt
