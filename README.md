@@ -15,22 +15,24 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 # Transformations
 | Name | Category | Function | Description |
 |   :---:   |   :---:   |   :---:   |   :---:   |
-| y/s | Library Size Factor-Based | size | Adjusts gene counts by the library size factor for each spatial location. |
-| CPM | Library Size Factor-Based | cpm | Adjusts gene counts by the counts per million (CPM) library size factor for each spatial location. |
-| scanpy Weinreb | Library Size Factor-Based | weinreb | Adjusts gene counts using a logarithmic shift, a size normalization for each spatial location, and a z normalization for each gene. |
-| scanpy Zheng | Library Size Factor-Based | zheng | Adjusts gene counts using a size normalization, a logarithmic shift, and z normalization for each gene. |
-| TMM | Library Size Factor-Based | tmm | Estimates scale factors using log-fold changes between each location and a reference, excluding genes with extreme expression. |
-| DESeq2 | Library Size Factor-Based | deseq2 | Computes scale factors by comparing each gene’s expression relative to a pseudo-reference sample. |
-| log(y/s + 1) | Delta Method-Based | shifted_log | Stabilizes the variance across genes. |
-| log(CPM + 1) | Delta Method-Based | cpm_shifted_log | Stabilizes the variance across genes. |
-| log(y/s + 1)/u | Delta Method-Based | shifted_log_size | Stabilizes the variance across genes. |
-| acosh(2αy/s + 1) | Delta Method-Based | acosh | Stabilizes the variance across genes. |
-| log(y/s + 1/4α) | Delta Method-Based | pseudo_shifted_log | Stabilizes the variance across genes. |
-| Analytic Pearson | Model-Based | analytic_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
+| y/s | Size-Factor-Based | size | Adjusts gene counts by the library size factor for each spatial location. |
+| CPM | Size-Factor-Based | cpm | Adjusts gene counts by the counts per million (CPM) library size factor for each spatial location. |
+| scanpy Zheng | Size-Factor-Based | zheng | Adjusts gene counts using a size normalization, a logarithmic shift, and z normalization for each gene. |
+| TMM | Size-Factor-Based | tmm | Estimates scale factors using log-fold changes between each location and a reference, excluding genes with extreme expression. |
+| DESeq2 | Size-Factor-Based | deseq2 | Computes scale factors by comparing each gene’s expression relative to a pseudo-reference sample. |
+| log(y/s + 1) | Delta-Method-Based | shifted_log | Stabilizes the variance across genes. |
+| log(CPM + 1) | Delta-Method-Based | cpm_shifted_log | Stabilizes the variance across genes. |
+| log(y/s + 1)/u | Delta-Method-Based | shifted_log_size | Stabilizes the variance across genes. |
+| acosh(2αy/s + 1) | Delta-Method-Based | acosh | Stabilizes the variance across genes. |
+| log(y/s + 1/4α) | Delta-Method-Based | pseudo_shifted_log | Stabilizes the variance across genes. |
+| Analytic Pearson (no clip) | Model-Based | analytic_pearson_noclip | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
+| Analytic Pearson (clip) | Model-Based | analytic_pearson_clip | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual, with an additional clipping step. |
 | scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
-| scanpy Seurat | Model-Based | seurat | Fits a gamma-Poisson generalized linear model (GLM) to the gene counts, and adjusts them using a residual. |
 | Normalisr | Model-Based | normalisr | Applies Bayesian inference to model expression variance and to correct for confounding factors. |
 | PsiNorm | Model-Based | psinorm | Assumes a Pareto distribution and rescales each gene’s count using a closed-form estimator of global expression based on Zipf’s Law. |
+| SCTransform | Model-Based | sctransform | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a generalized linear model (GLM) to account for library size variation.
+| Dino | Model-Based | dino | Assumes gene counts fit a mixed negative binomial (NB) distribution, and adjusts them used a generalized linear model (GLM) to account for library size variation.
+| SpaNorm | Spatially Aware | spanorm | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a generalized linear model (GLM) to account for library size variation and spatial gradients.
 
 # Installation and Usage
 This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. To install, run the command:
@@ -39,8 +41,15 @@ This toolkit can be integrated into any spatial transcriptomics pipeline by simp
 
 Import the transformations module using the following line of code:
 
-```import sptranskit.transformations as sp```
+```import sptranskit as sp```
 
-Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix.
+Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix using the log(y/s + 1) transformation.
 
-``````
+```# Obtain the gene counts and spatial information for the DLPFC 151673 dataset
+x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673)
+
+# Filter the dataset
+x, coord = sp.filter.filter_counts(x, coord)
+
+# Transform the gene count matrix
+x = sp.transformations.shifted_log(x)```
