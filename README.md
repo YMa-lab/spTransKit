@@ -45,11 +45,13 @@ Import the transformations module using the following line of code:
 
 Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix using the log(y/s + 1) transformation.
 
-```# Obtain the gene counts and spatial information for the DLPFC 151673 dataset
+```
+# Obtain the gene counts and spatial information for the DLPFC 151673 dataset
 x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673)
 
 # Filter the dataset
 x, coord = sp.filter.filter_counts(x, coord)
 
 # Transform the gene count matrix
-x = sp.transformations.shifted_log(x)```
+x = sp.transformations.shifted_log(x)
+```
