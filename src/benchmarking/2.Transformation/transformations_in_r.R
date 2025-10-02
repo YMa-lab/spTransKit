@@ -28,11 +28,13 @@ x <- t(as.matrix(read_h5ad(paste(c(wd, args[2], args[1], "norm_counts/raw.h5ad")
 # SCTransform
 success <- FALSE
 counter <- 1
+y <- x
 while (!success & counter <= 5) {
     
     start_run <- Sys.time()
     start_mem <- mem_used()
-    trial <- try(vst(x, min_cells = 1, verbosity = 0)[["y"]], silent = TRUE)
+    trial <- try(vst(y, min_cells = 1, verbosity = 0)[["y"]], silent = TRUE)
+    rm(y)
     end_mem <- mem_used()
     end_run <- Sys.time()
 
@@ -57,11 +59,13 @@ if (success) {
 # Dino
 success <- FALSE
 counter <- 1
+y <- x
 while (!success & counter <= 5) {
     
     start_run <- Sys.time()
     start_mem <- mem_used()
-    trial <- try(Dino(x), silent = TRUE)
+    trial <- try(Dino(y), silent = TRUE)
+    rm(y)
     end_mem <- mem_used()
     end_run <- Sys.time()
 
@@ -88,11 +92,13 @@ spe <- SpatialExperiment(assays = list(counts = x), spatialCoords = coord)
 
 success <- FALSE
 counter <- 1
+y <- spe
 while (!success & counter <= 5) {
     
     start_run <- Sys.time()
     start_mem <- mem_used()
-    trial <- try(SpaNorm(spe, verbose = FALSE), silent = TRUE)
+    trial <- try(SpaNorm(y, verbose = FALSE), silent = TRUE)
+    rm(y)
     end_mem <- mem_used()
     end_run <- Sys.time()
 
