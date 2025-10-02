@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import scanpy as sc
 import sklearn.neighbors
 import reactome2py.analysis
 
@@ -146,7 +145,7 @@ def pathway_enrichment(pwys : list, hvgs : list[list], names : list, species : s
     enr.to_csv(results_dir + "/pathway_enrichment.csv")
 
     # Return results
-    enr = enr.where(enr > 0, 1)
+    enr = enr.where(enr > -np.log10(0.05), 1)
     enr = enr.sum(0) / len(pwys)
     enr.name = "Proportion"
     return enr

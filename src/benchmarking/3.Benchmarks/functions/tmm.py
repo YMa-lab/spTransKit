@@ -2,7 +2,6 @@ import pandas
 import numpy
 import time
 import tracemalloc
-import scanpy
 
 class TMM:
 
