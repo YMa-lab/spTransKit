@@ -47,7 +47,7 @@ Each transformation takes in a scanpy AnnData object, where the gene count matri
 
 ```
 # Obtain the gene counts and spatial information for the DLPFC 151673 dataset
-x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673)
+x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673")
 
 # Filter the dataset
 x, coord = sp.filter.filter_counts(x, coord)

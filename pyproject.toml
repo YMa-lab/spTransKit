@@ -1,13 +1,13 @@
 [project]
 name = "sptranskit"
-version = "0.0.10"
+version = "0.0.13"
 authors = [
   { name="Vivek Rajani", email="vsrajani03@gmail.com" }
 ]
 description = "Transformation methods for spatial transcriptomics"
 dependencies = ["typing", "pandas", "numpy", "scanpy", "normalisr", "rpy2"]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",

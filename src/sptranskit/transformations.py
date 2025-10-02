@@ -13,7 +13,7 @@ import rpy2.robjects.numpy2ri as rnp
 base = rp.importr("base")
 utils = rp.importr("utils")
 
-import helpers as h
+import sptranskit.helpers as h
 
 
 # Size Factor-Based Transformations
