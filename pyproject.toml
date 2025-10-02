@@ -1,8 +1,12 @@
+[build-system]
+requires = ["setuptools"]
+
 [project]
 name = "sptranskit"
-version = "0.0.14"
+version = "0.0.23"
 authors = [
-  { name="Vivek Rajani", email="vsrajani03@gmail.com" }
+  { name="Vivek Rajani", email="vsrajani03@gmail.com" },
+  { name="Yu Zhu", email="yu_zhu@brown.edu" }
 ]
 description = "Transformation methods for spatial transcriptomics"
 dependencies = ["typing", "pandas", "numpy", "scanpy", "normalisr", "rpy2"]
@@ -17,3 +21,6 @@ license-files = ["LICEN[CS]E*"]
 
 [project.urls]
 Homepage = "https://github.com/YMa-lab/spTransKit"
+
+[tool.setuptools.package-data]
+"sptranskit" = ["data/**"]

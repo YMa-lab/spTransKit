@@ -1,8 +1,8 @@
 Metadata-Version: 2.4
 Name: sptranskit
-Version: 0.0.13
+Version: 0.0.23
 Summary: Transformation methods for spatial transcriptomics
-Author-email: Vivek Rajani <vsrajani03@gmail.com>
+Author-email: Vivek Rajani <vsrajani03@gmail.com>, Yu Zhu <yu_zhu@brown.edu>
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/YMa-lab/spTransKit
 Classifier: Programming Language :: Python :: 3
@@ -67,7 +67,7 @@ Each transformation takes in a scanpy AnnData object, where the gene count matri
 
 ```
 # Obtain the gene counts and spatial information for the DLPFC 151673 dataset
-x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673)
+x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673")
 
 # Filter the dataset
 x, coord = sp.filter.filter_counts(x, coord)

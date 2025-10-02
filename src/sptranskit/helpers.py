@@ -1,4 +1,5 @@
 from typing import Literal
+import importlib.resources
 
 import numpy as np
 import scanpy as sc
@@ -143,8 +144,18 @@ def get_unfiltered_dlpfc_data(sample : Literal["151507", "151508", "151509", "15
     
     """
 
-    matrix = sc.read_10x_h5("data/DLPFC_" + sample + "/unfiltered_raw.h5")
-    coordinates = pd.read_csv("data/DLPFC_" + sample + "/unfiltered_coord.txt", header = None, index_col = 0)
+    with importlib.resources.path("sptranskit", "unfiltered_raw.h5") as matrix_path:
+        matrix_file = str(matrix_path)
+    with importlib.resources.path("sptranskit", "unfiltered_coord.txt") as coord_path:
+        coord_file = str(coord_path)
+
+    m_split = matrix_file.split("unfiltered")
+    matrix_file = m_split[0] + "data/DLPFC_" + sample + "/unfiltered" + m_split[1]
+    c_split = coord_file.split("unfiltered")
+    coord_file = c_split[0] + "data/DLPFC_" + sample + "/unfiltered" + c_split[1]
+
+    matrix = sc.read_10x_h5(matrix_file)
+    coordinates = pd.read_csv(coord_file, header = None, index_col = 0)
 
     coordinates = coordinates.loc[coordinates[1] != 0, 2:3]
     coordinates.columns = ["x", "y"]
@@ -175,7 +186,17 @@ def get_filtered_dlpfc_data(sample : Literal["151507", "151508", "151509", "1515
     
     """
 
-    matrix = sc.read_h5ad("data/DLPFC_" + sample + "/filtered_raw.h5ad")
-    coordinates = pd.read_csv("data/DLPFC_" + sample + "/filtered_coord.csv", header = 0, index_col = 0)
+    with importlib.resources.path("sptranskit", "filtered_raw.h5ad") as matrix_path:
+        matrix_file = str(matrix_path)
+    with importlib.resources.path("sptranskit", "filtered_coord.csv") as coord_path:
+        coord_file = str(coord_path)
+
+    m_split = matrix_file.split("filtered")
+    matrix_file = m_split[0] + "data/DLPFC_" + sample + "/filtered" + m_split[1]
+    c_split = coord_file.split("filtered")
+    coord_file = c_split[0] + "data/DLPFC_" + sample + "/filtered" + c_split[1]
+
+    matrix = sc.read_h5ad(matrix_file)
+    coordinates = pd.read_csv(coord_file, header = 0, index_col = 0)
 
     return matrix, coordinates
