@@ -24,7 +24,7 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | log(CPM + 1) | Delta-Method-Based | cpm_shifted_log | Stabilizes the variance across genes. |
 | log(y/s + 1)/u | Delta-Method-Based | shifted_log_size | Stabilizes the variance across genes. |
 | acosh(2αy/s + 1) | Delta-Method-Based | acosh | Stabilizes the variance across genes. |
-| log(y/s + 1/4α) | Delta-Method-Based | pseudo_shifted_log | Stabilizes the variance across genes. |
+| log(y/s + 1/(4α)) | Delta-Method-Based | pseudo_shifted_log | Stabilizes the variance across genes. |
 | Analytic Pearson (no clip) | Model-Based | analytic_pearson_noclip | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
 | Analytic Pearson (clip) | Model-Based | analytic_pearson_clip | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual, with an additional clipping step. |
 | scanpy Pearson Residual | Model-Based | sc_pearson | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a Pearson residual. |
