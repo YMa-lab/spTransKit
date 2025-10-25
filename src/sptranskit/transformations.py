@@ -18,13 +18,14 @@ import sptranskit.helpers as h
 
 # Size Factor-Based Transformations
 
-def size(matrix : sc.AnnData, inplace : bool = False):
+def size(data : sc.AnnData, inplace : bool = False):
     """ This function applies the y/s transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -34,22 +35,28 @@ def size(matrix : sc.AnnData, inplace : bool = False):
         sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
+
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    data.raw = data.copy()
     
     if inplace:
-        matrix.X = np.divide(matrix.X, h.size_factor(matrix.X))
+        data.X = np.divide(data.X, h.size_factor(data.X))
     else:
-        copy = matrix.copy()
-        copy.X = np.divide(matrix.X, h.size_factor(matrix.X))
+        copy = data.copy()
+        copy.X = np.divide(data.X, h.size_factor(data.X))
         return copy
 
 
-def cpm(matrix : sc.AnnData, inplace : bool = False):
+def cpm(data : sc.AnnData, inplace : bool = False):
     """ This function applies the CPM transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -60,21 +67,27 @@ def cpm(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = np.divide(matrix.X, h.cpm(matrix.X))
+        data.X = np.divide(data.X, h.cpm(data.X))
     else:
-        copy = matrix.copy()
-        copy.X = np.divide(matrix.X, h.cpm(matrix.X))
+        copy = data.copy()
+        copy.X = np.divide(data.X, h.cpm(data.X))
         return copy
     
 
-def zheng(matrix : sc.AnnData, inplace : bool = False):
+def zheng(data : sc.AnnData, inplace : bool = False):
     """ This function applies the scanpy transformation to the gene count matrix according to Zheng et al., 2016.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -85,19 +98,24 @@ def zheng(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    data.raw = data.copy()
+
     if inplace:
-        sc.pp.normalize_total(matrix, key_added = "n_counts_all")
-        sc.pp.log1p(matrix.X)
-        sc.pp.scale(matrix.X)
+        sc.pp.normalize_total(data, key_added = "n_counts_all")
+        sc.pp.log1p(data.X)
+        sc.pp.scale(data.X)
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         sc.pp.normalize_total(copy, key_added = "n_counts_all")
         sc.pp.log1p(copy.X)
         sc.pp.scale(copy.X)
         return copy
     
 
-def tmm(matrix : sc.AnnData,
+def tmm(data : sc.AnnData,
         logratio_trim : float = 0.3,
         sum_trim : float = 0.05,
         inplace : bool = False):
@@ -105,8 +123,9 @@ def tmm(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     logratio_trim
         float, fraction of data to trim from the ends of ranked log ratios, default = 0.3.
     sum_trim
@@ -121,9 +140,12 @@ def tmm(matrix : sc.AnnData,
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
     np.seterr(all = "ignore")
 
-    m = pd.DataFrame(matrix.X)
+    m = pd.DataFrame(data.X)
 
     f = m.quantile(q = 0.75, axis = 1).div(m.sum(1))
     ref_index = (abs(f - f.mean())).argmin()
@@ -167,22 +189,25 @@ def tmm(matrix : sc.AnnData,
             norm_factors.iloc[i] = 2 ** sf
         
     norm_factors = pd.Series(norm_factors, index = m.index)
+
+    data.raw = data.copy()
     
     if inplace:
-        matrix.X = np.array(m.div(norm_factors, axis = 0))
+        data.X = np.array(m.div(norm_factors, axis = 0))
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = np.array(m.div(norm_factors, axis = 0))
         return copy
     
 
-def deseq2(matrix : sc.AnnData, inplace : bool = False):
+def deseq2(data : sc.AnnData, inplace : bool = False):
     """ This function applies the DESeq2 transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -192,9 +217,13 @@ def deseq2(matrix : sc.AnnData, inplace : bool = False):
         sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
+
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
     np.seterr(all = "ignore")
 
-    m = pd.DataFrame(matrix.X)
+    m = pd.DataFrame(data.X)
 
     log_counts = pd.DataFrame(np.log(m), index = m.index, columns = m.columns)
     log_counts.replace(float("-inf"), np.nan, inplace = True)
@@ -206,23 +235,26 @@ def deseq2(matrix : sc.AnnData, inplace : bool = False):
     log_medians.fillna(0, inplace = True)
     size_factors = pd.Series(np.exp(log_medians), index = log_medians.index)
     
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = np.array(m.div(size_factors, axis = 0))
+        data.X = np.array(m.div(size_factors, axis = 0))
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = np.array(m.div(size_factors, axis = 0))
         return copy
     
 
 # Delta Method-Based Transformations
 
-def shifted_log(matrix : sc.AnnData, inplace : bool = False):
+def shifted_log(data : sc.AnnData, inplace : bool = False):
     """ This function applies the log(y/s + 1) transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -232,24 +264,30 @@ def shifted_log(matrix : sc.AnnData, inplace : bool = False):
         sc.AnnData, copy of the transformed gene count matrix if inplace = False.
 
     """
+
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
     
-    shift = np.log1p((matrix.X / h.size_factor(matrix.X)))
+    shift = np.log1p((data.X / h.size_factor(data.X)))
+
+    data.raw = data.copy()
 
     if inplace:
-        matrix.X = shift
+        data.X = shift
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = shift
         return copy
     
 
-def cpm_shifted_log(matrix : sc.AnnData, inplace : bool = False):
+def cpm_shifted_log(data : sc.AnnData, inplace : bool = False):
     """ This function applies the log(CPM + 1) transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -260,23 +298,29 @@ def cpm_shifted_log(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
-    shift = np.log1p(matrix.X / h.cpm(matrix.X))
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    shift = np.log1p(data.X / h.cpm(data.X))
     
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = shift
+        data.X = shift
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = shift
         return copy
 
 
-def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
+def shifted_log_size(data : sc.AnnData, inplace : bool = False):
     """ This function applies the log(y/s + 1)/u transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -287,23 +331,29 @@ def shifted_log_size(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
-    shift = np.log1p(matrix.X / h.size_factor(matrix.X))
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    shift = np.log1p(data.X / h.size_factor(data.X))
+
+    data.raw = data.copy()
 
     if inplace:
-        matrix.X = shift / h.size_factor(shift)
+        data.X = shift / h.size_factor(shift)
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = shift / h.size_factor(shift)
         return copy
 
 
-def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
+def acosh(data : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
     """ This function applies the acosh(2αy/s + 1) transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     alpha
         float, overdispersion hyperparamter, default = 0.05.
     inplace
@@ -316,24 +366,30 @@ def acosh(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
 
     """
 
-    size = matrix.X / h.size_factor(matrix.X)
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    size = data.X / h.size_factor(data.X)
     shift = (1 / np.sqrt(alpha)) * np.arccosh((size * alpha * 2) + 1)
 
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = shift
+        data.X = shift
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = shift
         return copy
     
 
-def pseudo_shifted_log(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
+def pseudo_shifted_log(data : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
     """ This function applies the log(y/s + 1/4α) transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     alpha
         float, overdispersion hyperparamter, default = 0.05.
     inplace
@@ -346,25 +402,31 @@ def pseudo_shifted_log(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool
 
     """
 
-    shift = (1 / np.sqrt(alpha)) * np.log1p(4 * alpha * (matrix.X / h.size_factor(matrix.X)))
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    shift = (1 / np.sqrt(alpha)) * np.log1p(4 * alpha * (data.X / h.size_factor(data.X)))
+
+    data.raw = data.copy()
 
     if inplace:
-        matrix.X = shift
+        data.X = shift
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = shift
         return copy
     
 
 # Model-Based Transformations
 
-def analytic_pearson_noclip(matrix : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
+def analytic_pearson_noclip(data : sc.AnnData, alpha : float = 0.05, inplace : bool = False):
     """ This function applies the Analytic Pearson (no clip) transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     alpha
         float, overdispersion hyperparamter, default = 0.05.
     inplace
@@ -377,30 +439,36 @@ def analytic_pearson_noclip(matrix : sc.AnnData, alpha : float = 0.05, inplace :
 
     """
 
-    nb_matrix = np.zeros(matrix.X.shape)
-    nb_matrix = np.add(nb_matrix, h.n(matrix.X))
-    nb_matrix = np.multiply(nb_matrix, h.p(matrix.X))
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    nb_matrix = np.zeros(data.X.shape)
+    nb_matrix = np.add(nb_matrix, h.n(data.X))
+    nb_matrix = np.multiply(nb_matrix, h.p(data.X))
 
     var_matrix = nb_matrix.copy()
     var_matrix = np.add(((var_matrix ** 2) * alpha), nb_matrix) ** 0.5
 
-    final_matrix = np.divide((np.subtract(matrix.X, nb_matrix)), var_matrix)
+    final_matrix = np.divide((np.subtract(data.X, nb_matrix)), var_matrix)
+
+    data.raw = data.copy()
 
     if inplace:
-        matrix.X = final_matrix
+        data.X = final_matrix
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = final_matrix
         return copy
 
 
-def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, clip : float = None, inplace : bool = False):
+def analytic_pearson_clip(data : sc.AnnData, alpha : float = 0.05, clip : float = None, inplace : bool = False):
     """ This function applies the Analytic Pearson (clip) transformation to the gene count matrix.
     
     Parameters
     ----------
     matrix
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     alpha
         float, overdispersion hyperparamter, default = 0.05.
     clip
@@ -418,30 +486,35 @@ def analytic_pearson_clip(matrix : sc.AnnData, alpha : float = 0.05, clip : floa
 
     """
 
-    nb_matrix = np.zeros(matrix.X.shape)
-    nb_matrix = np.add(nb_matrix, h.n(matrix.X))
-    nb_matrix = np.multiply(nb_matrix, h.p(matrix.X))
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    nb_matrix = np.zeros(data.X.shape)
+    nb_matrix = np.add(nb_matrix, h.n(data.X))
+    nb_matrix = np.multiply(nb_matrix, h.p(data.X))
 
     var_matrix = nb_matrix.copy()
     var_matrix = np.add(((var_matrix ** 2) * alpha), nb_matrix) ** 0.5
 
-    final_matrix = np.divide((np.subtract(matrix.X, nb_matrix)), var_matrix)
+    final_matrix = np.divide((np.subtract(data.X, nb_matrix)), var_matrix)
     
     if clip is None:
         clip = matrix.X.shape[0] ** 0.5
     
     final_matrix = np.where(final_matrix > clip, clip, final_matrix)
     final_matrix = np.where(final_matrix < -clip, -clip, final_matrix)
+
+    data.raw = data.copy()
     
     if inplace:
-        matrix.X = final_matrix
+        data.X = final_matrix
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = final_matrix
         return copy
 
 
-def sc_pearson(matrix : sc.AnnData, 
+def sc_pearson(data : sc.AnnData, 
                theta : float = 100,
                clip : float = None,
                check_values : bool = True,
@@ -451,8 +524,9 @@ def sc_pearson(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     theta
         float, the negative binomial overdispersion parameter for Pearson residuals, equal to 1/α, the overdisperson
         parameter used in the other Pearson residual transformations.
@@ -479,16 +553,21 @@ def sc_pearson(matrix : sc.AnnData,
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    data.raw = data.copy()
+
     if inplace:
-        sc.experimental.pp.normalize_pearson_residuals(matrix, theta = theta, clip = clip, check_values = check_values, 
+        sc.experimental.pp.normalize_pearson_residuals(data, theta = theta, clip = clip, check_values = check_values, 
                                                        layer = layer)
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         sc.experimental.pp.normalize_pearson_residuals(copy)
         return copy
 
 
-def normalisr(matrix : sc.AnnData, 
+def normalisr(data : sc.AnnData, 
               normalize : bool = True,
               nth : int = 0,
               ntot : int = None,
@@ -501,8 +580,9 @@ def normalisr(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     normalize,
         bool, whether to normalize output to logCPM per cell, defualt = True.
     nth
@@ -530,24 +610,30 @@ def normalisr(matrix : sc.AnnData,
 
     """
 
-    norm = n.lcpm(np.transpose(matrix.X), normalize = normalize, nth = nth, ntot = ntot, varscale = varscale, seed = seed,
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    norm = n.lcpm(np.transpose(data.X), normalize = normalize, nth = nth, ntot = ntot, varscale = varscale, seed = seed,
                   lowmem = lowmem, nocov = nocov)[0]
+    
+    data.raw = data.copy()
 
     if inplace:
-        matrix.X = np.transpose(norm)
+        data.X = np.transpose(norm)
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = np.transpose(norm)
         return copy
     
 
-def psinorm(matrix : sc.AnnData, inplace : bool = False):
+def psinorm(data : sc.AnnData, inplace : bool = False):
     """ This function applies the PsiNorm transformation to the gene count matrix.
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     inplace
         bool, whether to transform the matrix within the original AnnData object, default = False.
 
@@ -558,23 +644,28 @@ def psinorm(matrix : sc.AnnData, inplace : bool = False):
 
     """
 
-    n = matrix.shape[0]
-    m = (matrix.X + 1).min(1)
-    log_counts = np.log(matrix.X + 1)
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
+    n = data.shape[0]
+    m = (data.X + 1).min(1)
+    log_counts = np.log(data.X + 1)
     log_m = np.log(m)
-    log_m = np.reshape(log_m, (matrix.shape[0], 1))
+    log_m = np.reshape(log_m, (data.shape[0], 1))
     sf = np.subtract(log_counts, log_m).sum(1) / n
-    sf = np.reshape(sf, (matrix.shape[0], 1))
+    sf = np.reshape(sf, (data.shape[0], 1))
+
+    data.raw = data.copy()
     
     if inplace:
-        matrix.X = np.divide(matrix.X, sf)
+        data.X = np.divide(data.X, sf)
     else:
-        copy = matrix.copy()
-        copy.X = np.divide(matrix.X, sf)
+        copy = data.copy()
+        copy.X = np.divide(copy.X, sf)
         return copy
 
 
-def sctransform(matrix : sc.AnnData, 
+def sctransform(data : sc.AnnData, 
                 cell_attr : pd.DataFrame = None,
                 latent_var : list[str] = ["log_umi"],
                 batch_var : list[str] = None,
@@ -610,8 +701,9 @@ def sctransform(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     cell_attr
         pd.DataFrame, a data frame containining the dependent variables, default = None, in which a data frame with UMI
         and genes is generated.
@@ -701,6 +793,9 @@ def sctransform(matrix : sc.AnnData,
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
     packages = ["sctransform"]
     names_to_install = [x for x in packages if not rp.isinstalled(x)]
     if len(names_to_install) > 0:
@@ -711,7 +806,7 @@ def sctransform(matrix : sc.AnnData,
     params = locals()
     h.handle_r_params(params)
     if res_clip_range is None:
-        params["res_clip_range"] = ro.FloatVector([-(matrix.shape[0] ** 0.5), matrix.shape[0] ** 0.5])
+        params["res_clip_range"] = ro.FloatVector([-(data.shape[0] ** 0.5), data.shape[0] ** 0.5])
     else:
         params["res_clip_range"] = ro.FloatVector(res_clip_range)
     r_code = f"""function(x, cell_attr, latent_var, batch_var, latent_var_nonreg, n_genes, n_cells, method, 
@@ -752,7 +847,7 @@ def sctransform(matrix : sc.AnnData,
     }}"""
     vst = ro.r(r_code)
 
-    counts = matrix.to_df().T
+    counts = data.to_df().T
     with (ro.default_converter + rpd.converter).context():
         trans = vst(counts, params["cell_attr"], params["latent_var"], params["batch_var"], params["latent_var_nonreg"],
                     params["n_genes"], params["n_cells"], params["method"], params["do_regularize"],
@@ -762,14 +857,20 @@ def sctransform(matrix : sc.AnnData,
                     params["theta_estimation_fun"], params["theta_given"], params["exclude_poisson"],
                     params["use_geometric_mean"], params["use_geometric_mean_offset"], params["fix_intercept"],
                     params["fix_slope"], params["scale_factor"], params["vst_flavor"], params["verbosity"])
-                
+    
+    data.raw = data.copy()
+
     if inplace:
-        matrix = sc.AnnData(trans.T)
+        data = data[trans.T.index.to_list(), trans.T.columns.to_list()]
+        data.X = np.array(trans.T)
     else:
-        return sc.AnnData(trans.T)
+        copy = data.copy()
+        copy = copy[trans.T.index.to_list(), trans.T.columns.to_list()]
+        copy.X = np.array(trans.T)
+        return copy
 
 
-def dino(matrix : sc.AnnData, 
+def dino(data : sc.AnnData, 
          nCores : int = 2,
          prec : int = 3,
          minNZ : int = 10,
@@ -788,8 +889,9 @@ def dino(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     nCores
         int, non-negative integer scalar denoting the number of cores to be used, default = 2. Setting nCores to 0, uses
         all cores that are automatically detected.
@@ -840,6 +942,9 @@ def dino(matrix : sc.AnnData,
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
     packages = ["Dino"]
     names_to_install = [x for x in packages if not rp.isinstalled(x)]
     if len(names_to_install) > 0:
@@ -867,24 +972,25 @@ def dino(matrix : sc.AnnData,
     }}"""
     dino = ro.r(r_code)
 
-    counts = matrix.to_df().T
+    counts = data.to_df().T
     with (ro.default_converter + rpd.converter).context():
         trans = dino(counts, params["nCores"], params["prec"], params["minNZ"], params["nSubGene"], params["nSubCell"], 
                      params["depth"], params["slope"], params["minSlope"], params["maxSlope"], params["clusterSlope"],
                      params["returnMeta"], params["doRQS"], params["emPar"])
 
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = trans.T
+        data.X = trans.T
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = trans.T
         return copy
 
 
 # Spatially Aware Transformations
 
-def spanorm(matrix : sc.AnnData,
-            coordinates : pd.DataFrame,
+def spanorm(data : sc.AnnData,
             sample_p : float = 0.25,
             gene_model : Literal["nb"] = "nb",
             adj_method : Literal["auto", "logpac", "pearson", "medbio", "meanbio"] = "auto",
@@ -904,8 +1010,9 @@ def spanorm(matrix : sc.AnnData,
     
     Parameters
     ----------
-    matrix
+    data
         sc.AnnData, N x G gene count matrix. Rows correspond to spatial locations and columns correspond to genes.
+        Spatial information should be stored in data.obsm["spatial"]
     coordinates
         pd.DataFrame, N x 2 coordinate matrix. Rows correspond to spatial locations and columns correspond to the x and
         y spatial coordinates.
@@ -949,6 +1056,9 @@ def spanorm(matrix : sc.AnnData,
 
     """
 
+    if data.obsm["spatial"] is None:
+        raise Exception("No spatial information included in AnnData object.")
+
     packages = ["SpaNorm", "SpatialExperiment"]
     names_to_install = [x for x in packages if not rp.isinstalled(x)]
     if len(names_to_install) > 0:
@@ -979,16 +1089,18 @@ def spanorm(matrix : sc.AnnData,
     }}"""
     spnm = ro.r(r_code)
     
-    counts = matrix.to_df().T
+    counts = data.to_df().T
     with (ro.default_converter + rpd.converter + rnp.converter).context():
-        trans = spnm(counts, coordinates, params["sample_p"], params["gene_model"], params["adj_method"],
+        trans = spnm(counts, data.obsm["spatial"], params["sample_p"], params["gene_model"], params["adj_method"],
                      params["scale_factor"], params["df_tps"], params["lambda_a"], params["batch"], params["tol"],
                      params["step_factor"], params["maxit_nb"], params["maxit_psi"], params["maxn_psi"],
                      params["overwrite"], params["verbose"])
 
+    data.raw = data.copy()
+
     if inplace:
-        matrix.X = trans.T
+        data.X = trans.T
     else:
-        copy = matrix.copy()
+        copy = data.copy()
         copy.X = trans.T
         return copy

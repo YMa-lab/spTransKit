@@ -123,7 +123,7 @@ def handle_r_params(params : dict):
 
 
 def get_unfiltered_dlpfc_data(sample : Literal["151507", "151508", "151509", "151510", "151669", "151670", 
-                                               "151671", "151672", "151673", "151674", "151675", "151676"]):
+                                               "151671", "151672", "151673", "151674", "151675", "151676"]) -> sc.AnnData:
     """ This function retrieves the unfiltered human dorsolateral prefrontal cortex spatial transcriptomics data 
     gerenated by the 10x Visium platform (Maynard et al., 2021).
     
@@ -135,13 +135,10 @@ def get_unfiltered_dlpfc_data(sample : Literal["151507", "151508", "151509", "15
 
     Returns
     ----------
-    matrix
+    data
         sc.AnnData, unflitered N x G gene count matrix. Rows correspond to spatial locations and columns correspond to 
-        genes.
-    coordinates
-        pd.DataFrame, unflitered N x 2 coordinate matrix. Rows correspond to spatial locations and columns correspond to 
-        the x and y spatial coordinates.
-    
+        genes. Spatial information is stored in data.obsm["spatial"].
+
     """
 
     with importlib.resources.path("sptranskit", "unfiltered_raw.h5") as matrix_path:
@@ -159,9 +156,11 @@ def get_unfiltered_dlpfc_data(sample : Literal["151507", "151508", "151509", "15
 
     coordinates = coordinates.loc[coordinates[1] != 0, 2:3]
     coordinates.columns = ["x", "y"]
-    matrix = sc.AnnData(matrix.to_df().loc[coordinates.index, :])
+    
+    data = sc.AnnData(matrix.to_df().loc[coordinates.index, :])
+    data.obsm["spatial"] = coordinates
 
-    return matrix, coordinates
+    return data
 
 
 def get_filtered_dlpfc_data(sample : Literal["151507", "151508", "151509", "151510", "151669", "151670", 
@@ -177,12 +176,9 @@ def get_filtered_dlpfc_data(sample : Literal["151507", "151508", "151509", "1515
 
     Returns
     ----------
-    matrix
+    data
         sc.AnnData, filtered N x G gene count matrix. Rows correspond to spatial locations and columns correspond to 
-        genes.
-    coordinates
-        pd.DataFrame, fltered N x 2 coordinate matrix. Rows correspond to spatial locations and columns correspond to the 
-        x and y spatial coordinates.
+        genes. Spatial information is stored in data.obsm["spatial"].
     
     """
 
@@ -196,7 +192,4 @@ def get_filtered_dlpfc_data(sample : Literal["151507", "151508", "151509", "1515
     c_split = coord_file.split("filtered")
     coord_file = c_split[0] + "data/DLPFC_" + sample + "/filtered" + c_split[1]
 
-    matrix = sc.read_h5ad(matrix_file)
-    coordinates = pd.read_csv(coord_file, header = 0, index_col = 0)
-
-    return matrix, coordinates
+    return sc.read_h5ad(matrix_file)

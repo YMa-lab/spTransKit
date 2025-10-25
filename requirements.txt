@@ -1,0 +1,7 @@
+typing>=3.7.4.0
+importlib>=1.0.4
+pandas>=2.3.2
+numpy>=2.2.6
+scanpy>=1.11.4
+normalisr>=1.0.0
+rpy2>=3.6.2

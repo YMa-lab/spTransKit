@@ -35,7 +35,13 @@ Spatial resolved transcriptomics (SRT) allows for the localization of gene expre
 | SpaNorm | Spatially Aware | spanorm | Assumes gene counts fit a negative binomial (NB) distribution, and adjusts them using a generalized linear model (GLM) to account for library size variation and spatial gradients.
 
 # Installation and Usage
-This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. To install, run the command:
+
+## Installation
+This toolkit can be integrated into any spatial transcriptomics pipeline by simply importing the python module. Use of the methods in the spTransKit requires Python version >= 3.10.0 and R version >= 4.5.0. Also, to install the other packages required for functionality, download the "requirements.txt" file included on the spTransKit GitHub page, and run the following command:
+
+```pip3 install -r /LOCAL/PATH/TO/requirements.txt```
+
+Then, to install the spTransKit package, run the command:
 
 ```pip3 install sptranskit```
 
@@ -43,15 +49,37 @@ Import the transformations module using the following line of code:
 
 ```import sptranskit as sp```
 
-Each transformation takes in a scanpy AnnData object, where the gene count matrix is formatted as an N x G numpy array. Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix using the log(y/s + 1) transformation.
+## Input Data Format
+Each transformation takes in a scanpy AnnData object (data), which stores both gene expression and spatial information. Gene expression information is formatted as an N x G matrix and stored in "data.X". Spatial information is formatted as an N x 2 matrix and stored in "data.obsm["spatial"]".
+
+## Example: Usage with Human DLPFC Dataset
+Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix using the log(y/s + 1) transformation.
 
 ```
 # Obtain the gene counts and spatial information for the DLPFC 151673 dataset
-x, coord = sp.helpers.get_unfiltered_dlpfc_data("151673")
+data = sp.helpers.get_unfiltered_dlpfc_data("151673")
 
 # Filter the dataset
-x, coord = sp.filter.filter_counts(x, coord)
+data = sp.filter.filter_counts(data)
 
 # Transform the gene count matrix
-x = sp.transformations.shifted_log(x)
+data = sp.transformations.shifted_log(data)
+```
+
+## Usage with New Data
+The steps for utilizing spTransKit for preprocessing new data are the same as outlined in the above example. First, ensure that your data are saved in an ".h5ad" file, with the gene expression and spatial information stored in the appropriate locations in the AnnData object, as outlined in the [Input Data Format](#input-data-format) section. Then, use the scanpy ```read_h5ad``` function to read in the data as follows:
+
+```
+# Obtain gene counts and spatial information for new dataset
+data = scanpy.read_h5ad("\LOCAL\PATH\TO\data.h5ad")
+```
+
+Once the data are read in, use the spTransKit functions to filter and transform the dataset. The following example, once again, uses the log(y/s + 1) transformation.
+
+```
+# Filter the dataset
+data = sp.filter.filter_counts(data)
+
+# Transform the gene count matrix
+data = sp.transformations.shifted_log(data)
 ```
