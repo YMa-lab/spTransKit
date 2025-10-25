@@ -442,6 +442,8 @@ def analytic_pearson_noclip(data : sc.AnnData, alpha : float = 0.05, inplace : b
     if data.obsm["spatial"] is None:
         raise Exception("No spatial information included in AnnData object.")
 
+    np.seterr(all = "ignore")
+
     nb_matrix = np.zeros(data.X.shape)
     nb_matrix = np.add(nb_matrix, h.n(data.X))
     nb_matrix = np.multiply(nb_matrix, h.p(data.X))
@@ -489,6 +491,8 @@ def analytic_pearson_clip(data : sc.AnnData, alpha : float = 0.05, clip : float 
     if data.obsm["spatial"] is None:
         raise Exception("No spatial information included in AnnData object.")
 
+    np.seterr(all = "ignore")
+
     nb_matrix = np.zeros(data.X.shape)
     nb_matrix = np.add(nb_matrix, h.n(data.X))
     nb_matrix = np.multiply(nb_matrix, h.p(data.X))
@@ -499,7 +503,7 @@ def analytic_pearson_clip(data : sc.AnnData, alpha : float = 0.05, clip : float 
     final_matrix = np.divide((np.subtract(data.X, nb_matrix)), var_matrix)
     
     if clip is None:
-        clip = matrix.X.shape[0] ** 0.5
+        clip = data.shape[0] ** 0.5
     
     final_matrix = np.where(final_matrix > clip, clip, final_matrix)
     final_matrix = np.where(final_matrix < -clip, -clip, final_matrix)
@@ -555,6 +559,8 @@ def sc_pearson(data : sc.AnnData,
 
     if data.obsm["spatial"] is None:
         raise Exception("No spatial information included in AnnData object.")
+
+    np.seterr(all = "ignore")
 
     data.raw = data.copy()
 

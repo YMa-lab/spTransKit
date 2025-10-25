@@ -50,7 +50,7 @@ Import the transformations module using the following line of code:
 ```import sptranskit as sp```
 
 ## Input Data Format
-Each transformation takes in a scanpy AnnData object (```data```), which stores both gene expression and spatial information. Gene expression information is formatted as an N x G matrix and stored in ```data.X```. Spatial information is formatted as an N x 2 matrix and stored in ```data.obsm["spatial"]```.
+Each transformation takes in a scanpy AnnData object (```data```), which stores both gene expression and spatial information. Gene expression information is formatted as an N x G matrix and stored in ```data.X```. Spatial information is formatted as an N x 2 matrix and stored in ```data.obsm["spatial"]```. The spTransKit functions will check to make sure that the spatial information is stored correctly.
 
 ## Example: Usage with Human DLPFC Dataset
 Below is an example of how to read an example dataset (DLPFC 151673), filter the data for low quality genes and spatial locations, and then transform the gene count matrix using the log(y/s + 1) transformation.

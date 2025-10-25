@@ -10,7 +10,6 @@ src/sptranskit.egg-info/SOURCES.txt
 src/sptranskit.egg-info/dependency_links.txt
 src/sptranskit.egg-info/requires.txt
 src/sptranskit.egg-info/top_level.txt
-src/sptranskit/data/DLPFC_151673/filtered_coord.csv
 src/sptranskit/data/DLPFC_151673/filtered_raw.h5ad
 src/sptranskit/data/DLPFC_151673/unfiltered_coord.txt
 src/sptranskit/data/DLPFC_151673/unfiltered_raw.h5

@@ -96,7 +96,7 @@ def handle_r_params(params : dict):
     """
 
     for param in params.keys():
-        if param == "matrix":
+        if param == "data":
             continue
         if str(params[param]) == str(np.nan):
             params[param] = ro.r("NA")
