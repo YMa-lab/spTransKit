@@ -1096,11 +1096,13 @@ def spanorm(data : sc.AnnData,
     spnm = ro.r(r_code)
     
     counts = data.to_df().T
-    with (ro.default_converter + rpd.converter + rnp.converter).context():
+    with (ro.default_converter + rpd.converter).context():
         trans = spnm(counts, data.obsm["spatial"], params["sample_p"], params["gene_model"], params["adj_method"],
                      params["scale_factor"], params["df_tps"], params["lambda_a"], params["batch"], params["tol"],
                      params["step_factor"], params["maxit_nb"], params["maxit_psi"], params["maxn_psi"],
                      params["overwrite"], params["verbose"])
+
+    print(trans)
 
     data.raw = data.copy()
 
