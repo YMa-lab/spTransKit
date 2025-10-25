@@ -9,7 +9,6 @@ import rpy2.robjects as ro
 import rpy2.robjects.packages as rp
 import rpy2.robjects.vectors as rv
 import rpy2.robjects.pandas2ri as rpd
-import rpy2.robjects.numpy2ri as rnp
 base = rp.importr("base")
 utils = rp.importr("utils")
 
@@ -864,6 +863,8 @@ def sctransform(data : sc.AnnData,
                     params["use_geometric_mean"], params["use_geometric_mean_offset"], params["fix_intercept"],
                     params["fix_slope"], params["scale_factor"], params["vst_flavor"], params["verbosity"])
     
+    print(trans)
+
     data.raw = data.copy()
 
     if inplace:
@@ -1101,8 +1102,6 @@ def spanorm(data : sc.AnnData,
                      params["scale_factor"], params["df_tps"], params["lambda_a"], params["batch"], params["tol"],
                      params["step_factor"], params["maxit_nb"], params["maxit_psi"], params["maxn_psi"],
                      params["overwrite"], params["verbose"])
-
-    print(trans)
 
     data.raw = data.copy()
 
