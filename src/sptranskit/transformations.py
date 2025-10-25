@@ -863,8 +863,6 @@ def sctransform(data : sc.AnnData,
                     params["use_geometric_mean"], params["use_geometric_mean_offset"], params["fix_intercept"],
                     params["fix_slope"], params["scale_factor"], params["vst_flavor"], params["verbosity"])
     
-    print(trans)
-
     data.raw = data.copy()
 
     if inplace:
