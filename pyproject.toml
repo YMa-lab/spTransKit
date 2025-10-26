@@ -3,7 +3,7 @@ requires = ["setuptools"]
 
 [project]
 name = "sptranskit"
-version = "0.0.30"
+version = "1.0.1"
 authors = [
   { name="Vivek Rajani", email="vsrajani03@gmail.com" },
   { name="Yu Zhu", email="yu_zhu@brown.edu" }
